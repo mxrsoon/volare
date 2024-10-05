@@ -1,20 +1,22 @@
 package com.mxrsoon.volare
 
+import com.mxrsoon.volare.plugins.configureDatabases
+import com.mxrsoon.volare.plugins.configureMonitoring
+import com.mxrsoon.volare.plugins.configureRouting
+import com.mxrsoon.volare.plugins.configureSecurity
+import com.mxrsoon.volare.plugins.configureSerialization
 import io.ktor.server.application.*
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
+import io.ktor.server.cio.EngineMain
 
-fun main() {
-    embeddedServer(Netty, port = SERVER_PORT, host = "0.0.0.0", module = Application::module)
-        .start(wait = true)
+fun main(args: Array<String>) {
+    EngineMain.main(args)
 }
 
+@Suppress("unused")
 fun Application.module() {
-    routing {
-        get("/") {
-            call.respondText("Ktor: ${Greeting().greet()}")
-        }
-    }
+    configureSerialization()
+    configureDatabases()
+    configureMonitoring()
+    configureSecurity()
+    configureRouting()
 }
