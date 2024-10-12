@@ -1,4 +1,6 @@
 [versions]
+kotlin = "2.0.20"
+compose-plugin = "1.7.0-rc01"
 agp = "8.2.2"
 android-compileSdk = "34"
 android-minSdk = "24"
@@ -6,18 +8,23 @@ android-targetSdk = "34"
 androidx-activityCompose = "1.9.2"
 androidx-lifecycle = "2.8.2"
 androidx-navigation = "2.8.0-alpha10"
-compose-plugin = "1.7.0-rc01"
-kotlin = "2.0.20"
-ktor = "3.0.0-rc-2"
+kotlinx-serialization = "1.7.3"
+kotlinx-datetime = "0.6.1"
+ktor = "3.0.0"
 logback = "1.5.7"
 exposed = "0.53.0"
+postgresql-jdbc = "0.8.9"
 h2 = "2.1.214"
+koin = "4.0.0"
+jbcrypt = "0.4"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
-androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
-androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
-androidx-navigation-compose = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "androidx-navigation" }
+androidx-lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-runtime-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
+androidx-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json-jvm", version.ref = "ktor" }
 ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation-jvm", version.ref = "ktor" }
@@ -30,7 +37,11 @@ ktor-server-config-yaml = { module = "io.ktor:ktor-server-config-yaml", version.
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
 exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
+postgresql-jdbc = { module = "com.impossibl.pgjdbc-ng:pgjdbc-ng", version.ref = "postgresql-jdbc" }
 h2 = { module = "com.h2database:h2", version.ref = "h2" }
+koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
+koin-logger-slf4j = { module = "io.insert-koin:koin-logger-slf4j", version.ref = "koin" }
+jbcrypt = { module = "org.mindrot:jbcrypt", version.ref = "jbcrypt" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -4,8 +4,14 @@ ktor:
             - com.mxrsoon.volare.ApplicationKt.module
     deployment:
         port: "$PORT:8080"
+
 jwt:
   secret: "secret"
   issuer: "https://volare.mxrsoon.com/"
   audience: "https://volare.mxrsoon.com/"
   realm: "Access to Volare"
+
+db:
+  url: "$DB_URL"
+  user: "$DB_USER"
+  password: "$DB_PASSWORD"
