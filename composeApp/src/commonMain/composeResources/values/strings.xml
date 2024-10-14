@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Volare</string>
+    <string name="welcome_to_format">Bem-vindo ao %1$s</string>
+    <string name="login_error_title">Erro no login</string>
+    <string name="login_error_message">Ocorreu um erro ao entrar na sua conta. Por favor, tente novamente.</string>
+    <string name="ok_label">Ok</string>
+    <string name="cancel_label">Cancelar</string>
+    <string name="email_label">E-mail</string>
+    <string name="password_label">Senha</string>
+    <string name="create_account_label">Criar conta</string>
+    <string name="sign_in_label">Entrar</string>
+</resources>
