@@ -1,7 +1,6 @@
 package com.mxrsoon.volare.plugins
 
 import com.mxrsoon.volare.auth.AuthService
-import com.mxrsoon.volare.auth.JwtParams
 import com.mxrsoon.volare.auth.refresh.RefreshTokenRepository
 import com.mxrsoon.volare.user.UserRepository
 import com.mxrsoon.volare.user.UserService
@@ -22,7 +21,7 @@ fun Application.configureDependencyInjection() {
                 single { UserRepository() }
                 single { UserService(get()) }
                 single { RefreshTokenRepository() }
-                single { AuthService(get(), get(), get()) }
+                single { AuthService(get(), get(), get(), get()) }
             }
         )
     }

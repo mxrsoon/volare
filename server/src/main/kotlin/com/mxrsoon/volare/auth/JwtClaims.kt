@@ -1,4 +1,4 @@
-package com.mxrsoon.volare.auth.refresh
+package com.mxrsoon.volare.auth
 
 /**
  * Identifiers for JWT claims used in this application.

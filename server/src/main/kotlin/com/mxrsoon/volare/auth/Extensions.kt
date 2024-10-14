@@ -1,7 +1,6 @@
 package com.mxrsoon.volare.auth
 
 import com.auth0.jwt.interfaces.DecodedJWT
-import com.mxrsoon.volare.auth.refresh.JwtClaims
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.principal

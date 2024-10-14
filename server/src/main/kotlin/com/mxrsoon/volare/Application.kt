@@ -2,6 +2,7 @@ package com.mxrsoon.volare
 
 import com.mxrsoon.volare.plugins.configureDatabase
 import com.mxrsoon.volare.plugins.configureDependencyInjection
+import com.mxrsoon.volare.plugins.configureErrorHandling
 import com.mxrsoon.volare.plugins.configureMonitoring
 import com.mxrsoon.volare.plugins.configureRouting
 import com.mxrsoon.volare.plugins.configureSecurity
@@ -20,5 +21,6 @@ fun Application.module() {
     configureDatabase()
     configureMonitoring()
     configureSecurity()
+    configureErrorHandling()
     configureRouting()
 }

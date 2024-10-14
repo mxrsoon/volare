@@ -42,6 +42,7 @@ dependencies {
     implementation(libs.ktor.server.auth.jwt)
     implementation(libs.ktor.server.cio)
     implementation(libs.ktor.server.config.yaml)
+    implementation(libs.ktor.server.status.pages)
     implementation(libs.exposed.core)
     implementation(libs.exposed.jdbc)
     implementation(libs.postgresql.jdbc)

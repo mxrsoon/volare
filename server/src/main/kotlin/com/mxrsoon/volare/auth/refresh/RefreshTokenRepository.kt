@@ -2,14 +2,12 @@ package com.mxrsoon.volare.auth.refresh
 
 import com.mxrsoon.volare.common.database.dbQuery
 import java.util.UUID
-import kotlinx.datetime.Instant
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.updateReturning
 
 /**
  * Repository for managing refresh tokens.
@@ -32,16 +30,16 @@ class RefreshTokenRepository {
         result[RefreshTokens.token]
     }
 
-    suspend fun read(token: String): RefreshToken? = dbQuery {
+    suspend fun findByToken(token: String): RefreshToken? = dbQuery {
         RefreshTokens.selectAll()
             .where { RefreshTokens.token eq token }
-            .map {
-                RefreshToken(
-                    token = it[RefreshTokens.token],
-                    userId = it[RefreshTokens.userId].toString(),
-                    expiresAt = Instant.parse(it[RefreshTokens.expiresAt])
-                )
-            }
+            .map { it.toRefreshToken() }
             .singleOrNull()
+    }
+
+    suspend fun deleteByToken(token: String) {
+        dbQuery {
+            RefreshTokens.deleteWhere { RefreshTokens.token eq token }
+        }
     }
 }
