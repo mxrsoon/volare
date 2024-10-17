@@ -17,17 +17,12 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
@@ -40,11 +35,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mxrsoon.volare.common.ui.button.PrimaryButton
 import com.mxrsoon.volare.common.ui.button.SecondaryButton
-import com.mxrsoon.volare.common.ui.dialog.ConfirmationDialog
 import com.mxrsoon.volare.common.ui.dialog.ErrorDialog
 import com.mxrsoon.volare.composeapp.generated.resources.Res
 import com.mxrsoon.volare.composeapp.generated.resources.app_name
-import com.mxrsoon.volare.composeapp.generated.resources.check_24px
 import com.mxrsoon.volare.composeapp.generated.resources.create_account_label
 import com.mxrsoon.volare.composeapp.generated.resources.email_label
 import com.mxrsoon.volare.composeapp.generated.resources.login_error_message
@@ -53,7 +46,6 @@ import com.mxrsoon.volare.composeapp.generated.resources.password_label
 import com.mxrsoon.volare.composeapp.generated.resources.sign_in_label
 import com.mxrsoon.volare.composeapp.generated.resources.welcome_to_format
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.resources.vectorResource
 
 @Composable
 fun LoginScreen(
@@ -63,8 +55,6 @@ fun LoginScreen(
     onRegisterClick: () -> Unit,
     viewModel: LoginViewModel = viewModel { LoginViewModel() }
 ) {
-    var showSuccessDialog by remember { mutableStateOf(false) }
-
     LaunchedEffect(Unit) {
         presetEmail?.let { viewModel.setEmail(it) }
         presetPassword?.let { viewModel.setPassword(it) }
@@ -72,10 +62,8 @@ fun LoginScreen(
 
     LaunchedEffect(viewModel.uiState.loggedIn) {
         if (viewModel.uiState.loggedIn) {
+            viewModel.resetLoggedIn()
             onSignIn()
-
-            // TODO: Remove
-            showSuccessDialog = true
         }
     }
 
@@ -131,17 +119,6 @@ fun LoginScreen(
 
     if (viewModel.uiState.showError) {
         LoginErrorDialog(onDismissRequest = { viewModel.dismissError() })
-    }
-
-    if (showSuccessDialog) {
-        ConfirmationDialog(
-            icon = { Icon(vectorResource(Res.drawable.check_24px), null) },
-            title = "Login realizado",
-            message = "O login foi realizado com sucesso.",
-            onDismissRequest = { showSuccessDialog = false },
-            onConfirm = {},
-            showDismissButton = false
-        )
     }
 }
 

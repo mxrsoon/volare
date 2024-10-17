@@ -43,4 +43,8 @@ class LoginViewModel(
     fun dismissError() {
         uiState = uiState.copy(showError = false)
     }
+
+    fun resetLoggedIn() {
+        uiState = uiState.copy(loggedIn = false)
+    }
 }

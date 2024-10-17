@@ -9,4 +9,7 @@
     <string name="password_label">Senha</string>
     <string name="create_account_label">Criar conta</string>
     <string name="sign_in_label">Entrar</string>
+    <string name="home_label">Início</string>
+    <string name="search_label">Pesquisar</string>
+    <string name="collections_label">Coleções</string>
 </resources>

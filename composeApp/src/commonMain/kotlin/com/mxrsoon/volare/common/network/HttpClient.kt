@@ -77,7 +77,8 @@ val configuredHttpClient: HttpClient by lazy {
 private fun invalidateBearerTokens() {
     configuredHttpClient.authProviders
         .filterIsInstance<BearerAuthProvider>()
-        .singleOrNull()?.clearToken()
+        .singleOrNull()
+        ?.clearToken()
 }
 
 /**

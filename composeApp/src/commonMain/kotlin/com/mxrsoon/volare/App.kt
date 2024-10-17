@@ -12,6 +12,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.mxrsoon.volare.common.ui.theme.VolareTheme
+import com.mxrsoon.volare.home.HomeRoute
+import com.mxrsoon.volare.home.HomeScreen
 import com.mxrsoon.volare.login.LoginRoute
 import com.mxrsoon.volare.login.LoginScreen
 
@@ -35,9 +37,19 @@ fun App() {
                     LoginScreen(
                         presetEmail = route.email,
                         presetPassword = route.password,
-                        onSignIn = {},
+                        onSignIn = {
+                            navController.navigate(HomeRoute) {
+                                popUpTo<LoginRoute> {
+                                    inclusive = true
+                                }
+                            }
+                        },
                         onRegisterClick = {}
                     )
+                }
+
+                composable<HomeRoute> {
+                    HomeScreen()
                 }
             }
         }
