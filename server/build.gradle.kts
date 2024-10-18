@@ -2,10 +2,10 @@ import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
+    application
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.ktor)
     alias(libs.plugins.kotlinx.serialization)
-    application
 }
 
 group = "com.mxrsoon.volare"
