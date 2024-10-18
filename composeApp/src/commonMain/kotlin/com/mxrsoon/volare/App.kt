@@ -11,11 +11,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.mxrsoon.volare.common.network.clearAuthTokens
 import com.mxrsoon.volare.common.ui.theme.VolareTheme
-import com.mxrsoon.volare.home.HomeRoute
-import com.mxrsoon.volare.home.HomeScreen
 import com.mxrsoon.volare.login.LoginRoute
 import com.mxrsoon.volare.login.LoginScreen
+import com.mxrsoon.volare.main.MainRoute
+import com.mxrsoon.volare.main.MainScreen
 
 @Composable
 fun App() {
@@ -38,7 +39,7 @@ fun App() {
                         presetEmail = route.email,
                         presetPassword = route.password,
                         onSignIn = {
-                            navController.navigate(HomeRoute) {
+                            navController.navigate(MainRoute) {
                                 popUpTo<LoginRoute> {
                                     inclusive = true
                                 }
@@ -48,8 +49,18 @@ fun App() {
                     )
                 }
 
-                composable<HomeRoute> {
-                    HomeScreen()
+                composable<MainRoute> {
+                    MainScreen(
+                        onSignOut = {
+                            clearAuthTokens()
+
+                            navController.navigate(LoginRoute()) {
+                                popUpTo<MainRoute> {
+                                    inclusive = true
+                                }
+                            }
+                        }
+                    )
                 }
             }
         }
