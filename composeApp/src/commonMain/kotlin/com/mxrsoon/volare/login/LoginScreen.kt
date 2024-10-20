@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -27,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -36,6 +38,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mxrsoon.volare.common.ui.button.PrimaryButton
 import com.mxrsoon.volare.common.ui.button.SecondaryButton
 import com.mxrsoon.volare.common.ui.dialog.ErrorDialog
+import com.mxrsoon.volare.common.ui.dialog.onEnterKeyDown
 import com.mxrsoon.volare.composeapp.generated.resources.Res
 import com.mxrsoon.volare.composeapp.generated.resources.app_name
 import com.mxrsoon.volare.composeapp.generated.resources.create_account_label
@@ -94,11 +97,14 @@ fun LoginScreen(
                 LoginFormTitle(Modifier.padding(top = 24.dp))
 
                 LoginFormFields(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 48.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 48.dp),
                     email = viewModel.uiState.email,
                     password = viewModel.uiState.password,
                     onEmailChange = { viewModel.setEmail(it) },
                     onPasswordChange = { viewModel.setPassword(it) },
+                    onSubmit = { viewModel.login() },
                     enabled = !viewModel.uiState.loading
                 )
 
@@ -158,28 +164,39 @@ fun LoginFormFields(
     password: String,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
+    onSubmit: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean
 ) {
     Column(modifier) {
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .onEnterKeyDown(onSubmit),
             value = email,
             onValueChange = onEmailChange,
             enabled = enabled,
             singleLine = true,
-            label = { Text(stringResource(Res.string.email_label)) }
+            label = { Text(stringResource(Res.string.email_label)) },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
         )
 
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
+                .onEnterKeyDown(onSubmit),
             value = password,
             onValueChange = onPasswordChange,
             enabled = enabled,
             singleLine = true,
             label = { Text(stringResource(Res.string.password_label)) },
             visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(onDone = { onSubmit() })
         )
     }
 }
