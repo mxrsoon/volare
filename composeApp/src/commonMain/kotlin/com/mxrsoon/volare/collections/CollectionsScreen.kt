@@ -19,37 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.mxrsoon.volare.common.ui.padding.plus
-import kotlinx.serialization.Serializable
-
-@Serializable
-data class Collection(val name: String)
-
-private val collections: List<Collection> = listOf(
-    Collection("Lista de compras"),
-    Collection("Filmes"),
-    Collection("Livros"),
-    Collection("Jogos"),
-    Collection("Projetos"),
-    Collection("Tarefas"),
-    Collection("Lista de compras"),
-    Collection("Filmes"),
-    Collection("Livros"),
-    Collection("Jogos"),
-    Collection("Projetos"),
-    Collection("Tarefas"),
-    Collection("Lista de compras"),
-    Collection("Filmes"),
-    Collection("Livros"),
-    Collection("Jogos"),
-    Collection("Projetos"),
-    Collection("Tarefas"),
-    Collection("Lista de compras"),
-    Collection("Filmes"),
-    Collection("Livros"),
-    Collection("Jogos"),
-    Collection("Projetos"),
-    Collection("Tarefas")
-)
+import com.mxrsoon.volare.composeapp.generated.resources.Res
+import com.mxrsoon.volare.composeapp.generated.resources.item_count_format
+import com.mxrsoon.volare.composeapp.generated.resources.item_list_label
+import com.mxrsoon.volare.composeapp.generated.resources.task_list_label
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun CollectionsScreen() {
@@ -65,12 +39,12 @@ fun CollectionsScreen() {
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding = contentPadding,
             content = {
-                items(collections) { collection ->
+                items(collectionsMock) { collection ->
                     CollectionListItem(
                         modifier = Modifier
                             .fillMaxWidth()
                             .wrapContentHeight(),
-                        name = collection.name
+                        item = collection
                     )
                 }
             }
@@ -80,15 +54,38 @@ fun CollectionsScreen() {
 
 @Composable
 private fun CollectionListItem(
-    name: String,
+    item: Collection,
     modifier: Modifier = Modifier
 ) {
-    OutlinedCard(modifier) {
-        Column(Modifier.padding(16.dp)) {
+    OutlinedCard(
+        modifier = modifier,
+        onClick = {}
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
             Text(
-                text = name,
+                text = item.name,
                 style = MaterialTheme.typography.titleMedium
+            )
+
+            Text(
+                text = stringResource(Res.string.item_count_format, item.count),
+                style = MaterialTheme.typography.bodyMedium
+            )
+
+            Text(
+                text = item.type.getLabel(),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
+}
+
+@Composable
+private fun CollectionType.getLabel(): String = when (this) {
+    CollectionType.ItemList -> stringResource(Res.string.item_list_label)
+    CollectionType.TaskList -> stringResource(Res.string.task_list_label)
 }
