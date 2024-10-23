@@ -13,10 +13,10 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -33,18 +33,18 @@ import org.jetbrains.compose.resources.stringResource
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CollectionsScreen() {
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     Scaffold(
         modifier = Modifier.imePadding(),
         topBar = {
-            MediumTopAppBar(
+            TopAppBar(
                 title = { Text(text = stringResource(Res.string.collections_label)) },
                 scrollBehavior = scrollBehavior
             )
         }
     ) { innerPadding ->
-        val contentPadding = innerPadding + 24.dp
+        val contentPadding = innerPadding + 16.dp
 
         LazyVerticalStaggeredGrid(
             modifier = Modifier
