@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 fun HomeScreen(
     onSignOut: () -> Unit
 ) {
-   Scaffold(Modifier.imePadding()) { paddingValues ->
+    Scaffold(Modifier.imePadding()) { paddingValues ->
         Box(
             modifier = Modifier
                 .padding(paddingValues)
