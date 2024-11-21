@@ -1,6 +1,6 @@
 [versions]
-kotlin = "2.1.0-RC"
-compose-plugin = "1.7.0"
+kotlin = "2.1.0-RC2"
+compose-plugin = "1.7.1"
 agp = "8.7.2"
 android-sdk-compile = "34"
 android-sdk-min = "24"
@@ -12,13 +12,13 @@ kotlinx-coroutines = "1.9.0"
 kotlinx-serialization = "1.7.3"
 kotlinx-datetime = "0.6.1"
 ktor = "3.0.1"
-logback = "1.5.7"
-exposed = "0.53.0"
+logback = "1.5.12"
+exposed = "0.56.0"
 postgresql-jdbc = "42.7.4"
-h2 = "2.1.214"
-koin = "4.0.0"
+h2 = "2.3.232"
+koin = "4.0.1-Beta1"
 jbcrypt = "0.4"
-kermit = "2.0.4"
+kermit = "2.0.5"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
