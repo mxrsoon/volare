@@ -15,4 +15,11 @@
     <string name="item_count_format">%1$d itens</string>
     <string name="item_list_label">Lista de itens</string>
     <string name="task_list_label">Lista de tarefas</string>
+    <string name="create_account_title">Crie sua conta</string>
+    <string name="first_name_label">Nome</string>
+    <string name="last_name_label">Sobrenome</string>
+    <string name="password_confirmation_label">Confirmação de senha</string>
+    <string name="use_existing_account_label">Usar conta existente</string>
+    <string name="register_error_title">Erro no cadastro</string>
+    <string name="register_error_message">Ocorreu um erro ao criar seu cadastro. Por favor, tente novamente.</string>
 </resources>

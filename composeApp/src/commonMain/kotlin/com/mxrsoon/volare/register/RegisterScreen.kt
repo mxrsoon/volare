@@ -1,4 +1,4 @@
-package com.mxrsoon.volare.login
+package com.mxrsoon.volare.register
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -26,9 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -39,44 +35,35 @@ import com.mxrsoon.volare.auth.Credentials
 import com.mxrsoon.volare.common.ui.button.PrimaryButton
 import com.mxrsoon.volare.common.ui.button.SecondaryButton
 import com.mxrsoon.volare.common.ui.dialog.ErrorDialog
-import com.mxrsoon.volare.common.ui.dialog.onEnterKeyDown
 import com.mxrsoon.volare.composeapp.generated.resources.Res
-import com.mxrsoon.volare.composeapp.generated.resources.app_name
 import com.mxrsoon.volare.composeapp.generated.resources.create_account_label
+import com.mxrsoon.volare.composeapp.generated.resources.create_account_title
 import com.mxrsoon.volare.composeapp.generated.resources.email_label
-import com.mxrsoon.volare.composeapp.generated.resources.login_error_message
-import com.mxrsoon.volare.composeapp.generated.resources.login_error_title
+import com.mxrsoon.volare.composeapp.generated.resources.first_name_label
+import com.mxrsoon.volare.composeapp.generated.resources.last_name_label
+import com.mxrsoon.volare.composeapp.generated.resources.password_confirmation_label
 import com.mxrsoon.volare.composeapp.generated.resources.password_label
-import com.mxrsoon.volare.composeapp.generated.resources.sign_in_label
-import com.mxrsoon.volare.composeapp.generated.resources.welcome_to_format
+import com.mxrsoon.volare.composeapp.generated.resources.register_error_message
+import com.mxrsoon.volare.composeapp.generated.resources.register_error_title
+import com.mxrsoon.volare.composeapp.generated.resources.use_existing_account_label
 import org.jetbrains.compose.resources.stringResource
 
-/**
- * Login screen.
- * @param presetEmail Email to pre-fill the email field.
- * @param presetPassword Password to pre-fill the password field.
- * @param onSignIn Called when the user successfully logs in.
- * @param onRegisterClick Called when the user clicks the register button. Receives the currently
- * entered credentials as a parameter.
- * @param viewModel The view model for this screen.
- */
 @Composable
-fun LoginScreen(
+fun RegisterScreen(
     presetEmail: String? = null,
     presetPassword: String? = null,
-    onSignIn: () -> Unit,
-    onRegisterClick: (Credentials) -> Unit,
-    viewModel: LoginViewModel = viewModel { LoginViewModel() }
+    onLoginClick: () -> Unit,
+    onRegistrationComplete: (Credentials) -> Unit,
+    viewModel: RegisterViewModel = viewModel { RegisterViewModel() }
 ) {
     LaunchedEffect(Unit) {
         presetEmail?.let { viewModel.setEmail(it) }
         presetPassword?.let { viewModel.setPassword(it) }
     }
 
-    LaunchedEffect(viewModel.uiState.loggedIn) {
-        if (viewModel.uiState.loggedIn) {
-            viewModel.resetLoggedIn()
-            onSignIn()
+    LaunchedEffect(viewModel.uiState.registeredCredentials) {
+        viewModel.uiState.registeredCredentials?.let {
+            onRegistrationComplete(it)
         }
     }
 
@@ -104,115 +91,132 @@ fun LoginScreen(
             ) {
                 if (compact) Spacer(Modifier.weight(1f))
 
-                LoginFormTitle(Modifier.padding(top = 24.dp))
+                Text(
+                    modifier = Modifier.padding(top = 24.dp),
+                    text = stringResource(Res.string.create_account_title),
+                    style = MaterialTheme.typography.headlineLarge,
+                    textAlign = TextAlign.Center
+                )
 
-                LoginFormFields(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 48.dp),
+                RegisterFormFields(
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 48.dp),
+                    firstName = viewModel.uiState.firstName,
+                    lastName = viewModel.uiState.lastName,
                     email = viewModel.uiState.email,
                     password = viewModel.uiState.password,
+                    passwordConfirmation = viewModel.uiState.passwordConfirmation,
+                    onFirstNameChange = { viewModel.setFirstName(it) },
+                    onLastNameChange = { viewModel.setLastName(it) },
                     onEmailChange = { viewModel.setEmail(it) },
                     onPasswordChange = { viewModel.setPassword(it) },
-                    onSubmit = { viewModel.login() },
+                    onPasswordConfirmationChange = { viewModel.setPasswordConfirmation(it) },
+                    passwordMismatch = viewModel.uiState.passwordMismatch,
                     enabled = !viewModel.uiState.loading
                 )
 
                 if (compact) Spacer(Modifier.weight(1f))
 
-                LoginFormButtons(
+                RegisterFormButtons(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 24.dp),
                     compact = compact,
                     loading = viewModel.uiState.loading,
-                    onLoginClick = { viewModel.login() },
-                    onRegisterClick = { onRegisterClick(viewModel.typedCredentials) }
+                    onRegisterClick = { viewModel.register() },
+                    onLoginClick = onLoginClick
                 )
             }
         }
     }
 
     if (viewModel.uiState.showError) {
-        LoginErrorDialog(onDismissRequest = { viewModel.dismissError() })
+        RegisterErrorDialog(onDismissRequest = { viewModel.dismissError() })
     }
 }
 
 @Composable
-fun LoginErrorDialog(onDismissRequest: () -> Unit) {
+fun RegisterErrorDialog(onDismissRequest: () -> Unit) {
     ErrorDialog(
-        title = stringResource(Res.string.login_error_title),
-        message = stringResource(Res.string.login_error_message),
+        title = stringResource(Res.string.register_error_title),
+        message = stringResource(Res.string.register_error_message),
         onDismissRequest = onDismissRequest
     )
 }
 
 @Composable
-fun LoginFormTitle(modifier: Modifier = Modifier) {
-    val appName = stringResource(Res.string.app_name)
-    val title = stringResource(Res.string.welcome_to_format, appName)
-
-    Text(
-        modifier = modifier,
-        text = buildAnnotatedString {
-            append(title)
-
-            addStyle(
-                style = SpanStyle(color = MaterialTheme.colorScheme.primary),
-                start = title.indexOf(appName),
-                end = title.indexOf(appName) + appName.length
-            )
-        },
-        style = MaterialTheme.typography.headlineLarge,
-        textAlign = TextAlign.Center
-    )
-}
-
-@Composable
-fun LoginFormFields(
+fun RegisterFormFields(
+    firstName: String,
+    lastName: String,
     email: String,
     password: String,
+    passwordConfirmation: String,
+    onFirstNameChange: (String) -> Unit,
+    onLastNameChange: (String) -> Unit,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
-    onSubmit: () -> Unit,
+    onPasswordConfirmationChange: (String) -> Unit,
+    passwordMismatch: Boolean,
     modifier: Modifier = Modifier,
     enabled: Boolean
 ) {
     Column(modifier) {
         OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .onEnterKeyDown(onSubmit),
+            modifier = Modifier.fillMaxWidth(),
+            value = firstName,
+            onValueChange = onFirstNameChange,
+            enabled = enabled,
+            singleLine = true,
+            label = { Text(stringResource(Res.string.first_name_label)) }
+        )
+
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = lastName,
+            onValueChange = onLastNameChange,
+            enabled = enabled,
+            singleLine = true,
+            label = { Text(stringResource(Res.string.last_name_label)) }
+        )
+
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
             value = email,
             onValueChange = onEmailChange,
             enabled = enabled,
             singleLine = true,
-            label = { Text(stringResource(Res.string.email_label)) },
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
+            label = { Text(stringResource(Res.string.email_label)) }
         )
 
         OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp)
-                .onEnterKeyDown(onSubmit),
+            modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
             value = password,
             onValueChange = onPasswordChange,
             enabled = enabled,
             singleLine = true,
             label = { Text(stringResource(Res.string.password_label)) },
             visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Done
-            ),
-            keyboardActions = KeyboardActions(onDone = { onSubmit() })
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+        )
+
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+            value = passwordConfirmation,
+            onValueChange = onPasswordConfirmationChange,
+            enabled = enabled,
+            singleLine = true,
+            isError = passwordMismatch,
+            supportingText = {
+                if (passwordMismatch) Text("Senhas não coincidem")
+            },
+            label = { Text(stringResource(Res.string.password_confirmation_label)) },
+            visualTransformation = PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
         )
     }
 }
 
 @Composable
-fun LoginFormButtons(
+fun RegisterFormButtons(
     compact: Boolean,
     loading: Boolean,
     onLoginClick: () -> Unit,
@@ -223,8 +227,8 @@ fun LoginFormButtons(
         Column(modifier) {
             SecondaryButton(
                 modifier = Modifier.fillMaxWidth(),
-                label = stringResource(Res.string.create_account_label),
-                onClick = onRegisterClick,
+                label = stringResource(Res.string.use_existing_account_label),
+                onClick = onLoginClick,
                 enabled = !loading
             )
 
@@ -232,8 +236,8 @@ fun LoginFormButtons(
 
             PrimaryButton(
                 modifier = Modifier.fillMaxWidth(),
-                label = stringResource(Res.string.sign_in_label),
-                onClick = onLoginClick,
+                label = stringResource(Res.string.create_account_label),
+                onClick = onRegisterClick,
                 enabled = !loading,
                 loading = loading
             )
@@ -242,8 +246,8 @@ fun LoginFormButtons(
         Row(modifier) {
             SecondaryButton(
                 modifier = Modifier.weight(1f),
-                label = stringResource(Res.string.create_account_label),
-                onClick = onRegisterClick,
+                label = stringResource(Res.string.use_existing_account_label),
+                onClick = onLoginClick,
                 enabled = !loading
             )
 
@@ -251,8 +255,8 @@ fun LoginFormButtons(
 
             PrimaryButton(
                 modifier = Modifier.weight(1f),
-                label = stringResource(Res.string.sign_in_label),
-                onClick = onLoginClick,
+                label = stringResource(Res.string.create_account_label),
+                onClick = onRegisterClick,
                 enabled = !loading,
                 loading = loading
             )

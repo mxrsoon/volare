@@ -17,6 +17,8 @@ import com.mxrsoon.volare.login.LoginRoute
 import com.mxrsoon.volare.login.LoginScreen
 import com.mxrsoon.volare.main.MainRoute
 import com.mxrsoon.volare.main.MainScreen
+import com.mxrsoon.volare.register.RegisterRoute
+import com.mxrsoon.volare.register.RegisterScreen
 
 @Composable
 fun App() {
@@ -45,7 +47,26 @@ fun App() {
                                 }
                             }
                         },
-                        onRegisterClick = {}
+                        onRegisterClick = { credentials ->
+                            navController.navigate(RegisterRoute.from(credentials))
+                        }
+                    )
+                }
+
+                composable<RegisterRoute> { entry ->
+                    val route = entry.toRoute<LoginRoute>()
+
+                    RegisterScreen(
+                        presetEmail = route.email,
+                        presetPassword = route.password,
+                        onLoginClick = { navController.popBackStack() },
+                        onRegistrationComplete = { credentials ->
+                            navController.navigate(LoginRoute.from(credentials)) {
+                                popUpTo<RegisterRoute> {
+                                    inclusive = true
+                                }
+                            }
+                        }
                     )
                 }
 
