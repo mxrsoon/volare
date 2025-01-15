@@ -51,7 +51,7 @@ fun CollectionsScreen() {
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .consumeWindowInsets(contentPadding)
                 .fillMaxSize(),
-            columns = StaggeredGridCells.Adaptive(200.dp),
+            columns = StaggeredGridCells.Adaptive(240.dp),
             verticalItemSpacing = 8.dp,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding = contentPadding,

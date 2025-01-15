@@ -1,7 +1,23 @@
 package com.mxrsoon.volare.search
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
@@ -37,23 +53,27 @@ import com.mxrsoon.volare.collections.Collection
 import com.mxrsoon.volare.collections.CollectionType
 import com.mxrsoon.volare.collections.collectionsMock
 import com.mxrsoon.volare.common.ui.padding.plus
+import com.mxrsoon.volare.common.ui.theme.VolareTheme
 import com.mxrsoon.volare.composeapp.generated.resources.Res
 import com.mxrsoon.volare.composeapp.generated.resources.item_count_format
 import com.mxrsoon.volare.composeapp.generated.resources.item_list_label
 import com.mxrsoon.volare.composeapp.generated.resources.search_label
 import com.mxrsoon.volare.composeapp.generated.resources.task_list_label
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen() {
+    var filter by remember { mutableStateOf("") }
     var query by remember { mutableStateOf("") }
     var expanded by rememberSaveable { mutableStateOf(false) }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
-    Box(
+    BoxWithConstraints(
         Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
             .semantics { isTraversalGroup = true }
     ) {
         SearchBar(
@@ -62,14 +82,19 @@ fun SearchScreen() {
                 .semantics { traversalIndex = 0f },
             inputField = {
                 SearchBarDefaults.InputField(
-                    modifier = Modifier.windowInsetsPadding(
-                        WindowInsets.safeDrawing.only(
-                            WindowInsetsSides.Top + WindowInsetsSides.Horizontal
-                        )
-                    ),
+                    modifier = Modifier
+                        .width(maxWidth - (16.dp * 2))
+                        .windowInsetsPadding(
+                            WindowInsets.safeDrawing.only(
+                                WindowInsetsSides.Top + WindowInsetsSides.Horizontal
+                            )
+                        ),
                     query = query,
                     onQueryChange = { query = it },
-                    onSearch = { expanded = false },
+                    onSearch = {
+                        filter = query
+                        expanded = false
+                    },
                     expanded = expanded,
                     onExpandedChange = { expanded = it },
                     placeholder = { Text(stringResource(Res.string.search_label)) },
@@ -87,7 +112,11 @@ fun SearchScreen() {
                 items(suggestions) { item ->
                     ListItem(
                         modifier = Modifier
-                            .clickable { expanded = false }
+                            .clickable {
+                                query = item.name
+                                filter = query
+                                expanded = false
+                            }
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp, vertical = 4.dp),
                         headlineContent = { Text(item.name) },
@@ -111,13 +140,17 @@ fun SearchScreen() {
                 .consumeWindowInsets(contentPadding)
                 .fillMaxSize()
                 .semantics { traversalIndex = 1f },
-            columns = StaggeredGridCells.Adaptive(200.dp),
+            columns = StaggeredGridCells.Adaptive(240.dp),
             verticalItemSpacing = 8.dp,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding = PaddingValues(top = 72.dp) + 16.dp +
                 WindowInsets.safeDrawing.asPaddingValues(),
             content = {
-                items(collectionsMock) { collection ->
+                val items = collectionsMock
+                    .filter { it.name.contains(filter, ignoreCase = true) }
+                    .sortedBy { it.name.indexOf(filter, ignoreCase = true) }
+
+                items(items) { collection ->
                     CollectionListItem(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -166,4 +199,15 @@ private fun CollectionListItem(
 private fun CollectionType.getLabel(): String = when (this) {
     CollectionType.ItemList -> stringResource(Res.string.item_list_label)
     CollectionType.TaskList -> stringResource(Res.string.task_list_label)
+}
+
+@Preview
+@Composable
+fun SearchScreenPreview() {
+    VolareTheme(
+        platformColorScheme = false,
+        darkMode = true
+    ) {
+        SearchScreen()
+    }
 }

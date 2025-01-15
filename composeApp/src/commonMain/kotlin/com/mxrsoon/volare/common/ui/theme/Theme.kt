@@ -88,11 +88,14 @@ expect fun getPlatformColorScheme(darkMode: Boolean): ColorScheme?
 
 @Composable
 fun VolareTheme(
+    platformColorScheme: Boolean = true,
     darkMode: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val colorScheme = getPlatformColorScheme(darkMode) ?: when (darkMode) {
-        true -> darkColors
+    val colorScheme = when {
+        platformColorScheme && darkMode -> getPlatformColorScheme(darkMode) ?: darkColors
+        platformColorScheme && !darkMode -> getPlatformColorScheme(darkMode) ?: lightColors
+        !platformColorScheme && darkMode -> darkColors
         else -> lightColors
     }
 
