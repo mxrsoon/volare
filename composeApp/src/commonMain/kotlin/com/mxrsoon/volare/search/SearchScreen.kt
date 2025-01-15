@@ -203,7 +203,7 @@ private fun CollectionType.getLabel(): String = when (this) {
 
 @Preview
 @Composable
-fun SearchScreenPreview() {
+private fun SearchScreenPreview() {
     VolareTheme(
         platformColorScheme = false,
         darkMode = true
