@@ -139,7 +139,7 @@ fun LoginScreen(
 }
 
 @Composable
-fun LoginErrorDialog(onDismissRequest: () -> Unit) {
+private fun LoginErrorDialog(onDismissRequest: () -> Unit) {
     ErrorDialog(
         title = stringResource(Res.string.login_error_title),
         message = stringResource(Res.string.login_error_message),
@@ -148,7 +148,7 @@ fun LoginErrorDialog(onDismissRequest: () -> Unit) {
 }
 
 @Composable
-fun LoginFormTitle(modifier: Modifier = Modifier) {
+private fun LoginFormTitle(modifier: Modifier = Modifier) {
     val appName = stringResource(Res.string.app_name)
     val title = stringResource(Res.string.welcome_to_format, appName)
 
@@ -169,7 +169,7 @@ fun LoginFormTitle(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun LoginFormFields(
+private fun LoginFormFields(
     email: String,
     password: String,
     onEmailChange: (String) -> Unit,
@@ -212,7 +212,7 @@ fun LoginFormFields(
 }
 
 @Composable
-fun LoginFormButtons(
+private fun LoginFormButtons(
     compact: Boolean,
     loading: Boolean,
     onLoginClick: () -> Unit,

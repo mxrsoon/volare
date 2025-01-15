@@ -22,4 +22,7 @@
     <string name="use_existing_account_label">Usar conta existente</string>
     <string name="register_error_title">Erro no cadastro</string>
     <string name="register_error_message">Ocorreu um erro ao criar seu cadastro. Por favor, tente novamente.</string>
+    <string name="create_collection_label">Criar coleção</string>
+    <string name="loading_error_title">Erro ao carregar</string>
+    <string name="loading_error_message">Ocorreu um erro ao carregar os dados. Por favor, tente novamente.</string>
 </resources>

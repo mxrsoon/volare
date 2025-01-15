@@ -135,7 +135,7 @@ fun RegisterScreen(
 }
 
 @Composable
-fun RegisterErrorDialog(onDismissRequest: () -> Unit) {
+private fun RegisterErrorDialog(onDismissRequest: () -> Unit) {
     ErrorDialog(
         title = stringResource(Res.string.register_error_title),
         message = stringResource(Res.string.register_error_message),
@@ -144,7 +144,7 @@ fun RegisterErrorDialog(onDismissRequest: () -> Unit) {
 }
 
 @Composable
-fun RegisterFormFields(
+private fun RegisterFormFields(
     firstName: String,
     lastName: String,
     email: String,
@@ -216,7 +216,7 @@ fun RegisterFormFields(
 }
 
 @Composable
-fun RegisterFormButtons(
+private fun RegisterFormButtons(
     compact: Boolean,
     loading: Boolean,
     onLoginClick: () -> Unit,
