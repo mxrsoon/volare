@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mxrsoon.volare.auth.Credentials
 import com.mxrsoon.volare.common.network.setAuthTokens
 import kotlinx.coroutines.launch
 
@@ -23,20 +22,14 @@ class LoginViewModel(
         private set
 
     /**
-     * The currently entered credentials.
-     */
-    val typedCredentials: Credentials
-        get() = Credentials(uiState.email, uiState.password)
-
-    /**
-     * Attempts to login with the current credentials.
+     * Attempts to log in with the current credentials.
      */
     fun login() {
         viewModelScope.launch {
             uiState = uiState.copy(showError = false, loading = true)
             
             try {
-                val response = repository.login(typedCredentials)
+                val response = repository.login(uiState.typedCredentials)
                 setAuthTokens(response.tokens)
 
                 uiState = uiState.copy(loggedIn = true)
