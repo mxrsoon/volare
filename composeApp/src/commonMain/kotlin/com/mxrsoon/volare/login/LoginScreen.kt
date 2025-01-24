@@ -266,10 +266,29 @@ private fun LoginFormButtons(
 
 @Preview
 @Composable
-private fun LoginScreenPreview() {
+private fun LoginScreenDarkPreview() {
     VolareTheme(
         platformColorScheme = false,
         darkMode = true
+    ) {
+        LoginScreen(
+            uiState = LoginUiState(),
+            onEmailChange = {},
+            onPasswordChange = {},
+            onRegisterClick = {},
+            onSignInRequest = {},
+            onSignIn = {},
+            onDismissErrorRequest = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun LoginScreenLightPreview() {
+    VolareTheme(
+        platformColorScheme = false,
+        darkMode = false
     ) {
         LoginScreen(
             uiState = LoginUiState(),
