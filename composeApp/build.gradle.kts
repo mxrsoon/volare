@@ -71,6 +71,10 @@ kotlin {
     }
 }
 
+dependencies {
+    debugImplementation(compose.uiTooling)
+}
+
 android {
     namespace = group.toString()
     compileSdk = libs.versions.android.sdk.compile.get().toInt()
