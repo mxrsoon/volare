@@ -25,4 +25,6 @@
     <string name="create_collection_label">Criar coleção</string>
     <string name="loading_error_title">Erro ao carregar</string>
     <string name="loading_error_message">Ocorreu um erro ao carregar os dados. Por favor, tente novamente.</string>
+    <string name="collection_name">Nome da coleção</string>
+    <string name="confirm_label">Confirmar</string>
 </resources>

@@ -27,15 +27,15 @@ class CollectionsViewModel(
     /**
      * Gets the collections available to the user.
      */
-    fun getCollections() {
+    private fun getCollections() {
         viewModelScope.launch {
-            uiState = uiState.copy(showError = false, loading = true, collections = null)
+            uiState = uiState.copy(loading = true, collections = null, loadingError = false)
             
             try {
                 val response = repository.getAll()
                 uiState = uiState.copy(collections = response)
             } catch (error: Throwable) {
-                uiState = uiState.copy(showError = true)
+                uiState = uiState.copy(loadingError = true)
             } finally {
                 uiState = uiState.copy(loading = false)
             }
@@ -43,28 +43,48 @@ class CollectionsViewModel(
     }
 
     /**
-     * Dismisses the error dialog.
+     * Dismisses the action error dialog.
      */
-    fun dismissError() {
-        uiState = uiState.copy(showError = false)
+    fun dismissActionError() {
+        uiState = uiState.copy(actionError = false)
     }
 
     /**
-     * Creates a new collection.
+     * Show the UI to create a new collection.
+     */
+    fun showCollectionCreation() {
+        uiState = uiState.copy(
+            showCollectionCreation = true,
+            newCollectionName = ""
+        )
+    }
+
+    /**
+     * Dismiss the UI to create a new collection.
+     */
+    fun dismissCollectionCreation() {
+        uiState = uiState.copy(showCollectionCreation = false)
+    }
+
+    /**
+     * Set the name of the collection being created.
+     */
+    fun setNewCollectionName(name: String) {
+        uiState = uiState.copy(newCollectionName = name)
+    }
+
+    /**
+     * Creates a new collection based on user input.
      */
     fun createCollection() {
+        dismissCollectionCreation()
+
         viewModelScope.launch {
             try {
-                val mockedNames = listOf(
-                    "Filmes",
-                    "Jogos",
-                    "Compras"
-                )
-
-                repository.create(name = mockedNames.random())
+                repository.create(name = uiState.newCollectionName)
                 getCollections()
             } catch (error: Throwable) {
-                // TODO: Handle error
+                uiState = uiState.copy(actionError = true)
             }
         }
     }
