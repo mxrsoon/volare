@@ -1,8 +1,6 @@
 package com.mxrsoon.volare.collections
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -48,9 +46,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mxrsoon.volare.collection.Collection
@@ -173,25 +169,16 @@ private fun CollectionsScreen(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun CollectionListItem(
     item: Collection,
     onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val haptics = LocalHapticFeedback.current
     var showContextMenu by remember { mutableStateOf(false) }
 
     OutlinedCard(
-        modifier = modifier.combinedClickable(
-            onClick = {},
-            onLongClick = {
-                haptics.performHapticFeedback(HapticFeedbackType.LongPress)
-                showContextMenu = true
-            },
-            onLongClickLabel = stringResource(Res.string.open_context_menu_label)
-        ),
+        modifier = modifier,
         onClick = {}
     ) {
         Row(
