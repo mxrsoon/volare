@@ -1,6 +1,8 @@
 package com.mxrsoon.volare.collections
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -8,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
@@ -15,11 +18,11 @@ import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedCard
@@ -45,11 +48,11 @@ import com.mxrsoon.volare.common.ui.dialog.ErrorDialog
 import com.mxrsoon.volare.common.ui.padding.plus
 import com.mxrsoon.volare.common.ui.theme.VolareTheme
 import com.mxrsoon.volare.composeapp.generated.resources.Res
-import com.mxrsoon.volare.composeapp.generated.resources.check_24px
+import com.mxrsoon.volare.composeapp.generated.resources.add_20px
 import com.mxrsoon.volare.composeapp.generated.resources.collection_name
 import com.mxrsoon.volare.composeapp.generated.resources.collections_label
-import com.mxrsoon.volare.composeapp.generated.resources.confirm_label
 import com.mxrsoon.volare.composeapp.generated.resources.create_collection_label
+import com.mxrsoon.volare.composeapp.generated.resources.create_label
 import com.mxrsoon.volare.composeapp.generated.resources.item_count_format
 import com.mxrsoon.volare.composeapp.generated.resources.item_list_label
 import com.mxrsoon.volare.composeapp.generated.resources.loading_error_message
@@ -194,40 +197,68 @@ private fun CreateCollectionSheet(
     onDismissRequest: () -> Unit,
     onConfirm: () -> Unit
 ) {
-    val focusRequester = remember { FocusRequester() }
-
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-    }
-
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         sheetState = sheetState,
         containerColor = MaterialTheme.colorScheme.surfaceContainer
     ) {
-        Row(
+        CreateCollectionSheetContents(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
                 .padding(bottom = 24.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            collectionName = collectionName,
+            onCollectionNameChange = onCollectionNameChange,
+            onConfirm = onConfirm
+        )
+    }
+}
+
+@Composable
+private fun CreateCollectionSheetContents(
+    collectionName: String,
+    onCollectionNameChange: (String) -> Unit,
+    onConfirm: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val focusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
+    
+    Column(modifier) {
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .focusRequester(focusRequester),
+            value = collectionName,
+            onValueChange = onCollectionNameChange,
+            label = { Text(stringResource(Res.string.collection_name)) }
+        )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.End),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            OutlinedTextField(
-                modifier = Modifier
-                    .weight(1f)
-                    .focusRequester(focusRequester),
-                value = collectionName,
-                onValueChange = onCollectionNameChange,
-                label = { Text(stringResource(Res.string.collection_name)) }
-            )
-
-            IconButton(
+            Button(
                 onClick = onConfirm,
-                colors = IconButtonDefaults.filledIconButtonColors(),
-                enabled = collectionName.isNotBlank()
+                enabled = collectionName.isNotBlank(),
+                contentPadding = ButtonDefaults.ButtonWithIconContentPadding
             ) {
-                Icon(painterResource(Res.drawable.check_24px), stringResource(Res.string.confirm_label))
+                Icon(
+                    modifier = Modifier.size(18.dp),
+                    painter = painterResource(Res.drawable.add_20px),
+                    contentDescription = null
+                )
+
+                Text(
+                    modifier = Modifier.padding(start = 8.dp),
+                    text = stringResource(Res.string.create_label)
+                )
             }
         }
     }
@@ -258,5 +289,28 @@ private fun CollectionsScreenPreview() {
             onNewCollectionNameChange = {},
             onCreateCollectionRequest = {}
         )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
+@Composable
+private fun CreateCollectionSheetContentsPreview() {
+    VolareTheme(
+        platformColorScheme = false,
+        darkMode = true
+    ) {
+        Box(
+            Modifier.background(MaterialTheme.colorScheme.surfaceContainer)) {
+            CreateCollectionSheetContents(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .padding(vertical = 24.dp),
+                collectionName = "a",
+                onCollectionNameChange = {},
+                onConfirm = {}
+            )
+        }
     }
 }
