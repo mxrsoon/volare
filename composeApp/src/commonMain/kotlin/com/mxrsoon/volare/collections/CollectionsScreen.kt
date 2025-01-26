@@ -63,6 +63,7 @@ import com.mxrsoon.volare.composeapp.generated.resources.collection_name
 import com.mxrsoon.volare.composeapp.generated.resources.collections_label
 import com.mxrsoon.volare.composeapp.generated.resources.create_collection_label
 import com.mxrsoon.volare.composeapp.generated.resources.create_label
+import com.mxrsoon.volare.composeapp.generated.resources.delete_24px
 import com.mxrsoon.volare.composeapp.generated.resources.delete_label
 import com.mxrsoon.volare.composeapp.generated.resources.item_count_format
 import com.mxrsoon.volare.composeapp.generated.resources.item_list_label
@@ -235,6 +236,7 @@ private fun CollectionListItem(
                 ) {
                     DropdownMenuItem(
                         text = { Text(stringResource(Res.string.delete_label)) },
+                        leadingIcon = { Icon(painterResource(Res.drawable.delete_24px), null) },
                         onClick = onDeleteClick
                     )
                 }
