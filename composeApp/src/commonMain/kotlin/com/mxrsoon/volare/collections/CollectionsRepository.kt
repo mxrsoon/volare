@@ -5,6 +5,7 @@ import com.mxrsoon.volare.collection.CreateCollectionRequest
 import com.mxrsoon.volare.common.network.configuredHttpClient
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -31,5 +32,12 @@ class CollectionsRepository(private val client: HttpClient = configuredHttpClien
         }
 
         return response.body()
+    }
+
+    /**
+     * Deletes a collection by its ID.
+     */
+    suspend fun delete(id: String) {
+        client.delete("collections/$id")
     }
 }

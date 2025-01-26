@@ -1,6 +1,8 @@
 package com.mxrsoon.volare.collections
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,9 +22,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedCard
@@ -35,12 +40,17 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mxrsoon.volare.collection.Collection
@@ -53,10 +63,13 @@ import com.mxrsoon.volare.composeapp.generated.resources.collection_name
 import com.mxrsoon.volare.composeapp.generated.resources.collections_label
 import com.mxrsoon.volare.composeapp.generated.resources.create_collection_label
 import com.mxrsoon.volare.composeapp.generated.resources.create_label
+import com.mxrsoon.volare.composeapp.generated.resources.delete_label
 import com.mxrsoon.volare.composeapp.generated.resources.item_count_format
 import com.mxrsoon.volare.composeapp.generated.resources.item_list_label
 import com.mxrsoon.volare.composeapp.generated.resources.loading_error_message
 import com.mxrsoon.volare.composeapp.generated.resources.loading_error_title
+import com.mxrsoon.volare.composeapp.generated.resources.more_vert_24px
+import com.mxrsoon.volare.composeapp.generated.resources.open_context_menu_label
 import kotlin.random.Random
 import kotlin.random.nextInt
 import org.jetbrains.compose.resources.painterResource
@@ -73,7 +86,8 @@ fun CollectionsScreen(
         onDismissErrorRequest = { viewModel.dismissActionError() },
         onDismissCollectionCreationRequest = { viewModel.dismissCollectionCreation() },
         onNewCollectionNameChange = { viewModel.setNewCollectionName(it) },
-        onCreateCollectionRequest = { viewModel.createCollection() }
+        onCreateCollectionRequest = { viewModel.createCollection() },
+        onDeleteCollectionClick = { viewModel.deleteCollection(it) }
     )
 }
 
@@ -85,7 +99,8 @@ private fun CollectionsScreen(
     onDismissErrorRequest: () -> Unit,
     onDismissCollectionCreationRequest: () -> Unit,
     onNewCollectionNameChange: (String) -> Unit,
-    onCreateCollectionRequest: () -> Unit
+    onCreateCollectionRequest: () -> Unit,
+    onDeleteCollectionClick: (Collection) -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val gridState = rememberLazyStaggeredGridState()
@@ -130,7 +145,8 @@ private fun CollectionsScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .wrapContentHeight(),
-                        item = collection
+                        item = collection,
+                        onDeleteClick = { onDeleteCollectionClick(collection) }
                     )
                 }
             }
@@ -156,34 +172,73 @@ private fun CollectionsScreen(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun CollectionListItem(
     item: Collection,
+    onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val haptics = LocalHapticFeedback.current
+    var showContextMenu by remember { mutableStateOf(false) }
+
     OutlinedCard(
-        modifier = modifier,
+        modifier = modifier.combinedClickable(
+            onClick = {},
+            onLongClick = {
+                haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                showContextMenu = true
+            },
+            onLongClickLabel = stringResource(Res.string.open_context_menu_label)
+        ),
         onClick = {}
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = item.name,
-                style = MaterialTheme.typography.titleMedium
-            )
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Text(
+                    text = item.name,
+                    style = MaterialTheme.typography.titleMedium
+                )
 
-            Text(
-                text = stringResource(Res.string.item_count_format, Random.nextInt(1..20)),
-                style = MaterialTheme.typography.bodyMedium
-            )
+                Text(
+                    text = stringResource(Res.string.item_count_format, Random.nextInt(1..20)),
+                    style = MaterialTheme.typography.bodyMedium
+                )
 
-            Text(
-                text = stringResource(Res.string.item_list_label),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+                Text(
+                    text = stringResource(Res.string.item_list_label),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            Box {
+                IconButton(onClick = { showContextMenu = !showContextMenu }) {
+                    Icon(
+                        painter = painterResource(Res.drawable.more_vert_24px),
+                        contentDescription = stringResource(Res.string.open_context_menu_label)
+                    )
+                }
+
+                DropdownMenu(
+                    expanded = showContextMenu,
+                    onDismissRequest = { showContextMenu = false }
+                ) {
+                    DropdownMenuItem(
+                        text = { Text(stringResource(Res.string.delete_label)) },
+                        onClick = onDeleteClick
+                    )
+                }
+            }
         }
     }
 }
@@ -287,12 +342,12 @@ private fun CollectionsScreenPreview() {
             onDismissErrorRequest = {},
             onDismissCollectionCreationRequest = {},
             onNewCollectionNameChange = {},
-            onCreateCollectionRequest = {}
+            onCreateCollectionRequest = {},
+            onDeleteCollectionClick = {}
         )
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 private fun CreateCollectionSheetContentsPreview() {
@@ -307,10 +362,28 @@ private fun CreateCollectionSheetContentsPreview() {
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
                     .padding(vertical = 24.dp),
-                collectionName = "a",
+                collectionName = "Compras",
                 onCollectionNameChange = {},
                 onConfirm = {}
             )
         }
+    }
+}
+
+@Preview
+@Composable
+private fun CollectionListItemPreview() {
+    VolareTheme(
+        platformColorScheme = false,
+        darkMode = true
+    ) {
+        CollectionListItem(
+            item = Collection(
+                id = "1",
+                name = "Compras",
+                creatorId = "1"
+            ),
+            onDeleteClick = {}
+        )
     }
 }

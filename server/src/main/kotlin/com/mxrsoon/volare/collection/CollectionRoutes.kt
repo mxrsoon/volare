@@ -7,6 +7,7 @@ import io.ktor.server.auth.authenticate
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
+import io.ktor.server.routing.delete
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
@@ -33,6 +34,13 @@ fun Route.collectionRoutes() = route("collections") {
             val collection = service.create(request, call.authenticatedUserId)
 
             call.respond(HttpStatusCode.Created, collection)
+        }
+
+        delete("{id}") {
+            val id = call.parameters["id"] ?: throw IllegalArgumentException("Invalid ID")
+            service.delete(id, call.authenticatedUserId)
+
+            call.respond(HttpStatusCode.NoContent)
         }
     }
 }

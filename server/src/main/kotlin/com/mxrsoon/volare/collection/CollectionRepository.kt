@@ -1,6 +1,7 @@
 package com.mxrsoon.volare.collection
 
 import com.mxrsoon.volare.common.database.dbQuery
+import java.util.UUID
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
@@ -8,7 +9,6 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.updateReturning
-import java.util.UUID
 
 /**
  * Repository for managing collections.
@@ -73,7 +73,7 @@ class CollectionRepository {
     /**
      * Deletes a collection from the database based on its ID.
      */
-    suspend fun delete(id: String) {
+    suspend fun deleteById(id: String) {
         dbQuery {
             Collections.deleteWhere { Collections.id eq UUID.fromString(id) }
         }

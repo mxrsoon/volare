@@ -28,4 +28,6 @@
     <string name="collection_name">Nome da coleção</string>
     <string name="confirm_label">Confirmar</string>
     <string name="create_label">Criar</string>
+    <string name="open_context_menu_label">Abrir menu de opções</string>
+    <string name="delete_label">Apagar</string>
 </resources>

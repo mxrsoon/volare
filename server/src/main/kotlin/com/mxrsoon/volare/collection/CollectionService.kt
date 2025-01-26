@@ -40,4 +40,17 @@ class CollectionService(
                 creatorId = loggedUserId
             )
         )
+
+    /**
+     * Deletes a collection by its ID.
+     */
+    suspend fun delete(id: String, loggedUserId: String) {
+        val collection = repository.findById(id)
+
+        if (collection == null || collection.creatorId != loggedUserId) {
+            throw NotFoundException("Collection not found")
+        }
+
+        repository.deleteById(id)
+    }
 }

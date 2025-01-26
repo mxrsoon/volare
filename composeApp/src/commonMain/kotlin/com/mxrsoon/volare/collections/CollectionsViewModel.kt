@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mxrsoon.volare.collection.Collection
 import kotlinx.coroutines.launch
 
 /**
@@ -82,6 +83,20 @@ class CollectionsViewModel(
         viewModelScope.launch {
             try {
                 repository.create(name = uiState.newCollectionName)
+                getCollections()
+            } catch (error: Throwable) {
+                uiState = uiState.copy(actionError = true)
+            }
+        }
+    }
+
+    /**
+     * Deletes a collection.
+     */
+    fun deleteCollection(collection: Collection) {
+        viewModelScope.launch {
+            try {
+                repository.delete(id = collection.id)
                 getCollections()
             } catch (error: Throwable) {
                 uiState = uiState.copy(actionError = true)
