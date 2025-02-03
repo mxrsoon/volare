@@ -51,6 +51,13 @@ class UserRepository {
             .singleOrNull()
     }
 
+    suspend fun findByGoogleId(googleId: String): User? = dbQuery {
+        Users.selectAll()
+            .where { Users.googleId eq googleId }
+            .map { it.toUser() }
+            .singleOrNull()
+    }
+
     suspend fun update(id: String, user: User): User = dbQuery {
         val result = Users.updateReturning(where = { Users.id eq UUID.fromString(id) }) {
             it[firstName] = user.firstName

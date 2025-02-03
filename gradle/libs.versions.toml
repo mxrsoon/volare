@@ -1,5 +1,5 @@
 [versions]
-kotlin = "2.1.0"
+kotlin = "2.1.10"
 compose-plugin = "1.7.3"
 agp = "8.7.3"
 android-sdk-compile = "35"
@@ -10,17 +10,20 @@ androidx-lifecycle = "2.8.4"
 androidx-navigation = "2.8.0-alpha11"
 androidx-adaptive = "1.0.1"
 androidx-splashscreen = "1.0.1"
+androidx-credentials = "1.5.0-rc01"
 kotlinx-coroutines = "1.9.0"
 kotlinx-serialization = "1.7.3"
 kotlinx-datetime = "0.6.1"
 ktor = "3.0.1"
-logback = "1.5.12"
+logback = "1.5.15"
 exposed = "0.56.0"
 postgresql-jdbc = "42.7.4"
 h2 = "2.3.232"
 koin = "4.0.1-Beta1"
 jbcrypt = "0.4"
 kermit = "2.0.5"
+google-identity-googleid = "1.1.1"
+google-api-client = "2.4.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
@@ -30,6 +33,10 @@ androidx-navigation-compose = { module = "org.jetbrains.androidx.navigation:navi
 androidx-adaptive = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version.ref = "androidx-adaptive" }
 androidx-adaptive-navigation = { module = "org.jetbrains.compose.material3.adaptive:adaptive-navigation", version.ref = "androidx-adaptive" }
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidx-splashscreen" }
+androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "androidx-credentials" }
+androidx-credentials-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "androidx-credentials" }
+google-identity-googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "google-identity-googleid" }
+google-api-client = { module = "com.google.api-client:google-api-client", version.ref = "google-api-client" }
 kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }

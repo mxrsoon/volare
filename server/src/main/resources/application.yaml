@@ -6,12 +6,17 @@ ktor:
         port: "$PORT:8080"
 
 jwt:
-  secret: "secret"
-  issuer: "https://volare.mxrsoon.com/"
-  audience: "https://volare.mxrsoon.com/"
-  realm: "Access to Volare"
+  secret: "$JWT_SECRET"
+  issuer: "$JWT_ISSUER:https://volare.mxrsoon.com/"
+  audience: "$JWT_AUDIENCE:https://volare.mxrsoon.com/"
+  realm: "$JWT_REALM:Access to Volare"
 
 db:
   url: "$DB_URL"
   user: "$DB_USER"
   password: "$DB_PASSWORD"
+
+oauth:
+  google:
+    client-id: "$OAUTH_GOOGLE_CLIENT_ID"
+    secret: "$OAUTH_GOOGLE_CLIENT_SECRET"

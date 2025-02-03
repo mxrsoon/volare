@@ -3,6 +3,7 @@ package com.mxrsoon.volare.plugins
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
+import com.mxrsoon.volare.auth.GoogleAuthParams
 import com.mxrsoon.volare.auth.JwtParams
 import io.ktor.server.application.Application
 import io.ktor.server.auth.authentication
@@ -42,6 +43,15 @@ fun Application.loadJwtParams() =
         issuer = environment.config.property("jwt.issuer").getString(),
         audience = environment.config.property("jwt.audience").getString(),
         realm = environment.config.property("jwt.realm").getString()
+    )
+
+/**
+ * Loads JWT parameters from the environment.
+ */
+fun Application.loadGoogleParams() =
+    GoogleAuthParams(
+        clientId = environment.config.property("oauth.google.client-id").getString(),
+        secret = environment.config.property("oauth.google.secret").getString()
     )
 
 /**

@@ -8,9 +8,10 @@ import org.jetbrains.exposed.sql.ResultRow
 data class User(
     val id: String = "",
     val firstName: String,
-    val lastName: String,
-    val email: String,
-    val password: String
+    val lastName: String?,
+    val email: String?,
+    val password: String?,
+    val googleId: String?
 )
 
 /**
@@ -30,5 +31,6 @@ fun ResultRow.toUser() = User(
     firstName = this[Users.firstName],
     lastName = this[Users.lastName],
     email = this[Users.email],
-    password = this[Users.password]
+    password = this[Users.password],
+    googleId = this[Users.googleId]
 )

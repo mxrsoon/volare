@@ -10,7 +10,7 @@ import org.jetbrains.exposed.sql.Table
 object RefreshTokens : Table() {
     val token = varchar("token", length = 1000).uniqueIndex()
     val userId = reference("userId", Users, onDelete = ReferenceOption.CASCADE)
-    val expiresAt = varchar("expiresAt", length = 50)
+    val revoked = bool("expiresAt")
 
     override val primaryKey: PrimaryKey = PrimaryKey(token)
 }

@@ -9,10 +9,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -49,6 +47,7 @@ import com.mxrsoon.volare.composeapp.generated.resources.login_error_message
 import com.mxrsoon.volare.composeapp.generated.resources.login_error_title
 import com.mxrsoon.volare.composeapp.generated.resources.password_label
 import com.mxrsoon.volare.composeapp.generated.resources.sign_in_label
+import com.mxrsoon.volare.composeapp.generated.resources.sign_in_with_google_label
 import com.mxrsoon.volare.composeapp.generated.resources.welcome_to_format
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -66,6 +65,9 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun LoginScreen(
     presetEmail: String? = null,
     presetPassword: String? = null,
+    enableGoogleSignIn: Boolean,
+    googleAuthToken: String?,
+    onGoogleSignInRequest: () -> Unit,
     onRegisterClick: (Credentials) -> Unit,
     onSignIn: () -> Unit,
     viewModel: LoginViewModel = viewModel { LoginViewModel() }
@@ -75,8 +77,14 @@ fun LoginScreen(
         presetPassword?.let { viewModel.setPassword(it) }
     }
 
+    LaunchedEffect(googleAuthToken) {
+        googleAuthToken?.let { viewModel.signInWithGoogle(it) }
+    }
+
     LoginScreen(
         uiState = viewModel.uiState,
+        enableGoogleSignIn = enableGoogleSignIn,
+        onGoogleSignInRequest = onGoogleSignInRequest,
         onEmailChange = { viewModel.setEmail(it) },
         onPasswordChange = { viewModel.setPassword(it) },
         onRegisterClick = onRegisterClick,
@@ -92,6 +100,8 @@ fun LoginScreen(
 @Composable
 private fun LoginScreen(
     uiState: LoginUiState,
+    enableGoogleSignIn: Boolean,
+    onGoogleSignInRequest: () -> Unit,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onRegisterClick: (Credentials) -> Unit,
@@ -151,6 +161,8 @@ private fun LoginScreen(
                         .padding(bottom = 24.dp),
                     compact = compact,
                     loading = uiState.loading,
+                    enableGoogleSignIn = enableGoogleSignIn,
+                    onGoogleSignInRequest = onGoogleSignInRequest,
                     onLoginClick = onSignInRequest,
                     onRegisterClick = { onRegisterClick(uiState.typedCredentials) }
                 )
@@ -240,12 +252,17 @@ private fun LoginFormFields(
 private fun LoginFormButtons(
     compact: Boolean,
     loading: Boolean,
+    enableGoogleSignIn: Boolean,
+    onGoogleSignInRequest: () -> Unit,
     onLoginClick: () -> Unit,
     onRegisterClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     if (compact) {
-        Column(modifier) {
+        Column(
+            modifier = modifier,
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
             SecondaryButton(
                 modifier = Modifier.fillMaxWidth(),
                 label = stringResource(Res.string.create_account_label),
@@ -253,7 +270,13 @@ private fun LoginFormButtons(
                 enabled = !loading
             )
 
-            Spacer(Modifier.height(4.dp))
+            if (enableGoogleSignIn) {
+                SecondaryButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    label = stringResource(Res.string.sign_in_with_google_label),
+                    onClick = onGoogleSignInRequest
+                )
+            }
 
             PrimaryButton(
                 modifier = Modifier.fillMaxWidth(),
@@ -264,15 +287,16 @@ private fun LoginFormButtons(
             )
         }
     } else {
-        Row(modifier) {
+        Row(
+            modifier = modifier,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
             SecondaryButton(
                 modifier = Modifier.weight(1f),
                 label = stringResource(Res.string.create_account_label),
                 onClick = onRegisterClick,
                 enabled = !loading
             )
-
-            Spacer(Modifier.width(16.dp))
 
             PrimaryButton(
                 modifier = Modifier.weight(1f),
@@ -294,6 +318,8 @@ private fun LoginScreenDarkPreview() {
     ) {
         LoginScreen(
             uiState = LoginUiState(),
+            enableGoogleSignIn = false,
+            onGoogleSignInRequest = {},
             onEmailChange = {},
             onPasswordChange = {},
             onRegisterClick = {},
@@ -313,6 +339,8 @@ private fun LoginScreenLightPreview() {
     ) {
         LoginScreen(
             uiState = LoginUiState(),
+            enableGoogleSignIn = false,
+            onGoogleSignInRequest = {},
             onEmailChange = {},
             onPasswordChange = {},
             onRegisterClick = {},

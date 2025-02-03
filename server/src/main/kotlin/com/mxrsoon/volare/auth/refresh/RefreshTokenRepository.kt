@@ -24,7 +24,7 @@ class RefreshTokenRepository {
         val result = RefreshTokens.insert {
             it[token] = refreshToken.token
             it[userId] = UUID.fromString(refreshToken.userId)
-            it[expiresAt] = refreshToken.expiresAt.toString()
+            it[revoked] = refreshToken.revoked
         }
 
         result[RefreshTokens.token]

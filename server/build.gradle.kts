@@ -11,6 +11,18 @@ plugins {
 group = "com.mxrsoon.volare"
 version = "1.0.0"
 
+val localPropertiesMap = mapOf(
+    "db.url" to "DB_URL",
+    "db.user" to "DB_USER",
+    "db.password" to "DB_PASSWORD",
+    "jwt.secret" to "JWT_SECRET",
+    "jwt.issuer" to "JWT_ISSUER",
+    "jwt.audience" to "JWT_AUDIENCE",
+    "jwt.realm" to "JWT_REALM",
+    "oauth.google.client-id" to "OAUTH_GOOGLE_CLIENT_ID",
+    "oauth.google.secret" to "OAUTH_GOOGLE_CLIENT_SECRET"
+)
+
 application {
     mainClass.set("com.mxrsoon.volare.ApplicationKt")
 
@@ -21,13 +33,33 @@ application {
 
 tasks {
     val run by getting(JavaExec::class) {
-        val localProperties = Properties().apply {
+        val properties = Properties().apply {
             load(FileInputStream(File(rootProject.rootDir, "local.properties")))
         }
 
-        environment("DB_URL", localProperties.getProperty("db.url"))
-        environment("DB_USER", localProperties.getProperty("db.user"))
-        environment("DB_PASSWORD", localProperties.getProperty("db.password"))
+        localPropertiesMap.forEach { (propKey, envKey) ->
+            properties.getProperty(propKey)?.let { environment(envKey, it) }
+        }
+    }
+}
+
+ktor {
+    docker {
+        jreVersion.set(JavaVersion.VERSION_21)
+        localImageName.set("volare-server")
+        imageTag.set(version.toString())
+
+        val properties = Properties().apply {
+            load(FileInputStream(File(rootProject.rootDir, "local.properties")))
+        }
+
+        localPropertiesMap.forEach { (propKey, envKey) ->
+            properties.getProperty(propKey)?.let { environmentVariable(envKey, it) }
+        }
+
+        localPropertiesMap.forEach { (propKey, envKey) ->
+            properties.getProperty("docker.$propKey")?.let { environmentVariable(envKey, it) }
+        }
     }
 }
 
@@ -52,4 +84,5 @@ dependencies {
     implementation(libs.koin.logger.slf4j)
     implementation(libs.kotlinx.datetime)
     implementation(libs.jbcrypt)
+    implementation(libs.google.api.client)
 }

@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class UserReference(
     val id: String,
     val firstName: String,
-    val lastName: String
+    val lastName: String?
 )

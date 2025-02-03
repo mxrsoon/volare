@@ -39,6 +39,9 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.splashscreen)
+            implementation(libs.androidx.credentials)
+            implementation(libs.androidx.credentials.auth)
+            implementation(libs.google.identity.googleid)
         }
 
         commonMain.dependencies {

@@ -19,11 +19,12 @@ fun Application.configureDependencyInjection() {
         modules(
             module {
                 single { loadJwtParams() }
+                single { loadGoogleParams() }
                 single { createJwtVerifier(get()) }
                 single { UserRepository() }
                 single { UserService(get()) }
                 single { RefreshTokenRepository() }
-                single { AuthService(get(), get(), get(), get()) }
+                single { AuthService(get(), get(), get(), get(), get()) }
                 single { CollectionRepository() }
                 single { CollectionService(get()) }
             }

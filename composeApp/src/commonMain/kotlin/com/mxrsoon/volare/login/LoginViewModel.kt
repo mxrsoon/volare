@@ -68,4 +68,21 @@ class LoginViewModel(
     fun resetLoggedIn() {
         uiState = uiState.copy(loggedIn = false)
     }
+
+    fun signInWithGoogle(googleAuthToken: String) {
+        viewModelScope.launch {
+            uiState = uiState.copy(showError = false, loading = true)
+
+            try {
+                val response = repository.signInWithGoogle(googleAuthToken)
+                setAuthTokens(response.tokens)
+
+                uiState = uiState.copy(loggedIn = true)
+            } catch (error: Throwable) {
+                uiState = uiState.copy(showError = true)
+            } finally {
+                uiState = uiState.copy(loading = false)
+            }
+        }
+    }
 }

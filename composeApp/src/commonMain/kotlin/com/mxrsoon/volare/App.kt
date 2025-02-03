@@ -21,7 +21,12 @@ import com.mxrsoon.volare.register.RegisterRoute
 import com.mxrsoon.volare.register.RegisterScreen
 
 @Composable
-fun App() {
+fun App(
+    enableGoogleSignIn: Boolean = false,
+    googleAuthToken: String? = null,
+    onGoogleSignInRequest: () -> Unit = {},
+    onGoogleSignOutRequest: () -> Unit = {}
+) {
     VolareTheme {
         Box(Modifier.background(MaterialTheme.colorScheme.background).fillMaxSize()) {
             val navController = rememberNavController()
@@ -40,6 +45,9 @@ fun App() {
                     LoginScreen(
                         presetEmail = route.email,
                         presetPassword = route.password,
+                        enableGoogleSignIn = enableGoogleSignIn,
+                        googleAuthToken = googleAuthToken,
+                        onGoogleSignInRequest = onGoogleSignInRequest,
                         onSignIn = {
                             navController.navigate(MainRoute) {
                                 popUpTo<LoginRoute> {
@@ -74,6 +82,7 @@ fun App() {
                     MainScreen(
                         onSignOut = {
                             clearAuthTokens()
+                            onGoogleSignOutRequest()
 
                             navController.navigate(LoginRoute()) {
                                 popUpTo<MainRoute> {
