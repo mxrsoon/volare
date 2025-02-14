@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import com.mxrsoon.volare.common.network.clearAuthTokens
 import com.mxrsoon.volare.common.ui.theme.VolareTheme
@@ -33,64 +34,66 @@ fun App(
 
             NavHost(
                 navController = navController,
-                startDestination = LoginRoute(),
+                startDestination = RootRoute,
                 enterTransition = { slideIntoContainer(SlideDirection.Start) },
                 exitTransition = { slideOutOfContainer(SlideDirection.Start) },
                 popEnterTransition = { slideIntoContainer(SlideDirection.End) },
                 popExitTransition = { slideOutOfContainer(SlideDirection.End) }
             ) {
-                composable<LoginRoute> { entry ->
-                    val route = entry.toRoute<LoginRoute>()
+                navigation<RootRoute>(startDestination = LoginRoute()) {
+                    composable<LoginRoute> { entry ->
+                        val route = entry.toRoute<LoginRoute>()
 
-                    LoginScreen(
-                        presetEmail = route.email,
-                        presetPassword = route.password,
-                        enableGoogleSignIn = enableGoogleSignIn,
-                        googleAuthToken = googleAuthToken,
-                        onGoogleSignInRequest = onGoogleSignInRequest,
-                        onSignIn = {
-                            navController.navigate(MainRoute) {
-                                popUpTo<LoginRoute> {
-                                    inclusive = true
+                        LoginScreen(
+                            presetEmail = route.email,
+                            presetPassword = route.password,
+                            enableGoogleSignIn = enableGoogleSignIn,
+                            googleAuthToken = googleAuthToken,
+                            onGoogleSignInRequest = onGoogleSignInRequest,
+                            onSignIn = {
+                                navController.navigate(MainRoute) {
+                                    popUpTo<RootRoute> {
+                                        inclusive = false
+                                    }
+                                }
+                            },
+                            onRegisterClick = { credentials ->
+                                navController.navigate(RegisterRoute.from(credentials))
+                            }
+                        )
+                    }
+
+                    composable<RegisterRoute> { entry ->
+                        val route = entry.toRoute<LoginRoute>()
+
+                        RegisterScreen(
+                            presetEmail = route.email,
+                            presetPassword = route.password,
+                            onLoginClick = { navController.popBackStack() },
+                            onRegistrationComplete = { credentials ->
+                                navController.navigate(LoginRoute.from(credentials)) {
+                                    popUpTo<RootRoute> {
+                                        inclusive = false
+                                    }
                                 }
                             }
-                        },
-                        onRegisterClick = { credentials ->
-                            navController.navigate(RegisterRoute.from(credentials))
-                        }
-                    )
-                }
+                        )
+                    }
 
-                composable<RegisterRoute> { entry ->
-                    val route = entry.toRoute<LoginRoute>()
+                    composable<MainRoute> {
+                        MainScreen(
+                            onSignOut = {
+                                clearAuthTokens()
+                                onGoogleSignOutRequest()
 
-                    RegisterScreen(
-                        presetEmail = route.email,
-                        presetPassword = route.password,
-                        onLoginClick = { navController.popBackStack() },
-                        onRegistrationComplete = { credentials ->
-                            navController.navigate(LoginRoute.from(credentials)) {
-                                popUpTo<RegisterRoute> {
-                                    inclusive = true
+                                navController.navigate(LoginRoute()) {
+                                    popUpTo<RootRoute> {
+                                        inclusive = false
+                                    }
                                 }
                             }
-                        }
-                    )
-                }
-
-                composable<MainRoute> {
-                    MainScreen(
-                        onSignOut = {
-                            clearAuthTokens()
-                            onGoogleSignOutRequest()
-
-                            navController.navigate(LoginRoute()) {
-                                popUpTo<MainRoute> {
-                                    inclusive = true
-                                }
-                            }
-                        }
-                    )
+                        )
+                    }
                 }
             }
         }
