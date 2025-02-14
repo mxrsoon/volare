@@ -23,7 +23,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import co.touchlab.kermit.Logger as KermitLogger
 
-private const val API_BASE_URL = "http://localhost:8080/"
+private const val API_BASE_URL = "http://34.169.52.114:80/"
 private var authTokens: TokenPair? = null
 
 /**
