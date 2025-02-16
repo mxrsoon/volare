@@ -48,9 +48,9 @@ jobs:
           echo $USER
           cat ~/.ssh/config
           ssh -vvv $SSH_USER@$SSH_SERVER_NAME \
-            -l $SSH_USER
+            -l $SSH_USER \
             -o "IdentitiesOnly=yes" \
             -o "StrictHostKeyChecking no" \
             -o "UserKnownHostsFile /dev/null" \
-            -i ~/.ssh/id_gcp
+            -i ~/.ssh/id_gcp \
             sudo ls -lA /var/volare
