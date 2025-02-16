@@ -30,7 +30,9 @@ jobs:
 
       - id: dummy-file
         name: Create dummy file
-        run: echo "helo rs" > ./server/build/jib-image.tar
+        run: |
+          mkdir -p ./server/build/
+          echo "helo rs" > ./server/build/jib-image.tar
 
       - id: archive-image
         name: Archive Docker image
