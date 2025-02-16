@@ -34,5 +34,4 @@ jobs:
       - id: 'ssh'
         name: 'SSH command'
         run: |
-          cat ~/.ssh/config
-          ssh volare-server sudo ls -lA /var/volare
+          ssh -F ~/.ssh/config volare-server sudo ls -lA /var/volare
