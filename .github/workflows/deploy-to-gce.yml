@@ -7,13 +7,38 @@ on:
 name: 'Deploy to GCE'
 
 jobs:
+  build:
+    name: "Build server"
+    runs-on: 'ubuntu-latest'
+    outputs:
+      image-url: ${{ steps.archive-image.outputs.artifact-url }}
+    steps:
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build Docker image
+        run: ./gradlew :server:buildImage
+
+      - id: archive-image
+        name: Archive Docker image
+        uses: actions/upload-artifact@v4
+        with:
+          name: volare-server.tar
+          path: ./server/build/jib-image.tar
+
   deploy:
     name: "Deploy"
     runs-on: 'ubuntu-latest'
+    needs: build
     permissions:
       contents: 'read'
       id-token: 'write'
-
     steps:
       - name: 'Checkout'
         uses: 'actions/checkout@v3'
@@ -21,10 +46,10 @@ jobs:
       - id: 'ssh'
         name: 'SSH command'
         uses: appleboy/ssh-action@v1.2.0
+        env:
+          IMAGE_URL: ${{ needs.build.outputs.image-url }}
         with:
           host: ${{ secrets.GCP_SSH_HOSTNAME }}
           username: ${{ secrets.GCP_SSH_USERNAME }}
           key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
-          script: |
-            whoami
-            sudo ls -lA /var/volare
+          script: sudo curl --clobber -o /var/volare/volare-server.tar $IMAGE_URL
