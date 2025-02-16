@@ -24,6 +24,7 @@ jobs:
           SSH_PRIV_KEY: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
           SSH_PUB_KEY: ${{ secrets.GCP_SSH_PUBLIC_KEY }}
           SSH_CONFIG: ${{ vars.GCP_SSH_CONFIG }}
+          SSH_SERVER_NAME: ${{ vars.GCP_SSH_SERVER_NAME }}
         run: |
           echo $USER
           mkdir -p ~/.ssh
