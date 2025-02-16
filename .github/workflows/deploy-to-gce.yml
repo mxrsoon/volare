@@ -61,7 +61,7 @@ jobs:
           host: ${{ secrets.GCP_SSH_HOSTNAME }}
           username: ${{ secrets.GCP_SSH_USERNAME }}
           key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
-          source: ./volare-server/jib-image.tar
+          source: ./jib-image.tar
           target: /var/volare/
           overwrite: true
 
