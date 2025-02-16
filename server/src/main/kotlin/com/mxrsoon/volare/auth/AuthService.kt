@@ -80,10 +80,10 @@ class AuthService(
         val email = payload.email
 
         val user = userRepository.findByGoogleId(googleId)
-            ?: userRepository.findByEmail(email)?.apply {
-                this.googleId = googleId
-                userRepository.update(this)
-            }
+            ?: userRepository
+                .findByEmail(email)
+                ?.copy(googleId = googleId)
+                ?.also { userRepository.update(it.id, it) }
             ?: userRepository.create(
                 User(
                     firstName = payload["given_name"] as String,
