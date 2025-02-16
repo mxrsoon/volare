@@ -25,6 +25,7 @@ jobs:
           SSH_PUB_KEY: ${{ secrets.GCP_SSH_PUBLIC_KEY }}
           SSH_CONFIG: ${{ vars.GCP_SSH_CONFIG }}
         run: |
+          echo $USER
           mkdir -p ~/.ssh
           chmod 0700 ~/.ssh
           echo $SSH_PRIV_KEY > ~/.ssh/id_gcp
@@ -40,5 +41,6 @@ jobs:
         env:
           SSH_SERVER_NAME: ${{ vars.GCP_SSH_SERVER_NAME }}
         run: |
+          echo $USER
           cat ~/.ssh/config
           ssh -F ~/.ssh/config $SSH_SERVER_NAME sudo ls -lA /var/volare
