@@ -49,11 +49,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: volare-server
-          path: /tmp/volare-server
 
       - id: list-dir
         name: List artifact directory
-        run: ls -lA /tmp/volare-server
+        run: ls -lA .
 
       - id: copy-image
         name: Copy image to server
@@ -62,7 +61,7 @@ jobs:
           host: ${{ secrets.GCP_SSH_HOSTNAME }}
           username: ${{ secrets.GCP_SSH_USERNAME }}
           key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
-          source: /tmp/volare-server/jib-image.tar
+          source: ./volare-server/jib-image.tar
           target: /var/volare/
           overwrite: true
 
