@@ -78,15 +78,20 @@ class AuthService(
         val payload = idToken.payload
         val googleId = payload.subject
 
-        val user = userRepository.findByGoogleId(googleId) ?: userRepository.create(
-            User(
-                firstName = payload["given_name"] as String,
-                lastName = payload["family_name"] as? String,
-                email = null,
-                password = null,
-                googleId = googleId
+        val user = userRepository.findByGoogleId(googleId)
+            ?: userRepository.findByEmail(email)?.apply {
+                this.googleId = googleId
+                userRepository.update(this)
+            }
+            ?: userRepository.create(
+                User(
+                    firstName = payload["given_name"] as String,
+                    lastName = payload["family_name"] as? String,
+                    email = null,
+                    password = null,
+                    googleId = googleId
+                )
             )
-        )
 
         return LoginResponse(
             userId = user.id,
