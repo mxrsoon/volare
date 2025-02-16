@@ -37,5 +37,8 @@ jobs:
 
       - id: 'ssh'
         name: 'SSH command'
+        env:
+          SSH_SERVER_NAME: ${{ vars.GCP_SSH_SERVER_NAME }}
         run: |
-          ssh -F ~/.ssh/config volare-server sudo ls -lA /var/volare
+          cat ~/.ssh/config
+          ssh -F ~/.ssh/config $SSH_SERVER_NAME sudo ls -lA /var/volare
