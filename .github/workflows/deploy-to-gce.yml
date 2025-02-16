@@ -29,6 +29,7 @@ jobs:
           echo $SSH_PRIV_KEY > ~/.ssh/id_gcp
           echo $SSH_PUB_KEY > ~/.ssh/id_gcp.pub
           echo $SSH_CONFIG > ~/.ssh/config
+          echo ~/.ssh/config
 
       - id: 'ssh'
         name: 'SSH command'
