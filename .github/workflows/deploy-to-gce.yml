@@ -25,6 +25,7 @@ jobs:
       - name: Build Docker image
         run: |
           ls -lA
+          echo "$PWD"
           ./gradlew :server:buildImage
 
       - id: archive-image
