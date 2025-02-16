@@ -16,17 +16,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 21
+#      - name: Setup Java
+#        uses: actions/setup-java@v4
+#        with:
+#          distribution: temurin
+#          java-version: 21
+#
+#      - name: Setup Gradle
+#        uses: gradle/actions/setup-gradle@v4
+#
+#      - name: Build Docker image
+#        run: ./gradlew :server:buildImage
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Build Docker image
-        run: ./gradlew :server:buildImage
+      - id: dummy-file
+        name: Create dummy file
+        run: echo "helo rs" > ./server/build/jib-image.tar
 
       - id: archive-image
         name: Archive Docker image
