@@ -2,7 +2,6 @@ on:
   push:
     branches:
       - main
-      - feature/deploy-workflow
 
 name: Deploy to GCE
 
