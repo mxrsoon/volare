@@ -37,6 +37,7 @@ jobs:
           chmod 600 ~/.ssh/config
           cat ~/.ssh/config
           rm -f ~/.ssh/known_hosts
+          touch ~/.ssh/known_hosts
 
       - id: 'ssh'
         name: 'SSH command'
