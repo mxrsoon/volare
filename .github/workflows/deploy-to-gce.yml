@@ -32,20 +32,11 @@ jobs:
         with:
           version: '>= 363.0.0'
 
-      - id: 'copy-image'
-        name: 'Copy image to instance'
-        run: 'gcloud info'
-
-      - id: 'start-container'
-        name: 'Start server container'
-        uses: 'google-github-actions/ssh-compute@v1'
-        with:
-          instance_name: ${{ vars.GCP_INSTANCE_NAME }}
-          zone: ${{ vars.GCP_ZONE }}
-          ssh_private_key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
-          command: 'sudo ls -lA /var/volare'
+      - id: 'ssh'
+        name: 'SSH command'
+        run: 'gcloud compute ssh --zone "us-west1-a" "volare-server" --project "volare-app" --command="sudo ls -lA /var/volare"'
 
       - name: 'Show Output'
         run: |-
-          echo '${{ steps.start-container.outputs.stdout }}'
-          echo '${{ steps.start-container.outputs.stderr }}'
+          echo '${{ steps.ssh.outputs.stdout }}'
+          echo '${{ steps.ssh.outputs.stderr }}'
