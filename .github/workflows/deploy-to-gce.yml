@@ -14,23 +14,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-#      - name: Setup Java
-#        uses: actions/setup-java@v4
-#        with:
-#          distribution: temurin
-#          java-version: 21
-#
-#      - name: Setup Gradle
-#        uses: gradle/actions/setup-gradle@v4
-#
-#      - name: Build Docker image
-#        run: ./gradlew :server:buildImage
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
 
-      - id: dummy-file
-        name: Create dummy file
-        run: |
-          mkdir -p ./server/build/
-          echo "helo rs" > ./server/build/jib-image.tar
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build Docker image
+        run: ./gradlew :server:buildImage
 
       - id: archive-image
         name: Archive Docker image
@@ -65,22 +59,17 @@ jobs:
           target: /var/volare/images/
           overwrite: true
 
-#      - id: deploy-image
-#        name: Deploy image to server
-#        uses: appleboy/ssh-action@v1.2.0
-#        env:
-#          IMAGE_URL: ${{ needs.build.outputs.image-url }}
-#        with:
-#          host: ${{ secrets.GCP_SSH_HOSTNAME }}
-#          username: ${{ secrets.GCP_SSH_USERNAME }}
-#          key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
-#          script: |
-#            sudo rm -f /var/volare/images/volare-server.zip
-#            sudo rm -f /var/volare/images/jib-image.tar
-#            sudo unzip /var/volare/images/volare-server.zip -d /var/volare/images/
-#            sudo rm -f /var/volare/images/volare-server.zip
-#            sudo docker container stop volare-server
-#            sudo docker container rm volare-server
-#            sudo docker images rm -f volare-server
-#            sudo docker load -i /var/volare/images/jib-image.tar
-#            sudo docker run --restart=always --env-file /var/volare/env.list --network volare --name volare-server -p 80:8080 -d volare-server
+      - id: deploy-image
+        name: Deploy container
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.GCP_SSH_HOSTNAME }}
+          username: ${{ secrets.GCP_SSH_USERNAME }}
+          key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
+          script: |
+            sudo docker container stop volare-server
+            sudo docker container rm volare-server
+            sudo docker images rm -f volare-server
+            sudo docker load -i /var/volare/images/jib-image.tar
+            sudo rm -f /var/volare/images/jib-image.zip
+            sudo docker run --restart=always --env-file /var/volare/env.list --network volare --name volare-server -p 80:8080 -d volare-server
