@@ -44,7 +44,7 @@ jobs:
         run: |
           echo $USER
           cat ~/.ssh/config
-          ssh ${SSH_USER}@${SSH_SERVER_NAME} \
+          ssh -vvv ${SSH_USER}@${SSH_SERVER_NAME} \
             -o "IdentitiesOnly=yes" \
             -o "StrictHostKeyChecking no" \
             -o "UserKnownHostsFile /dev/null" \
