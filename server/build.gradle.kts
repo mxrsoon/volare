@@ -33,12 +33,16 @@ application {
 
 tasks {
     val run by getting(JavaExec::class) {
-        val properties = Properties().apply {
-            load(FileInputStream(File(rootProject.rootDir, "local.properties")))
-        }
+        val propertiesFile = File(rootProject.rootDir, "local.properties")
 
-        localPropertiesMap.forEach { (propKey, envKey) ->
-            properties.getProperty(propKey)?.let { environment(envKey, it) }
+        if (propertiesFile.exists()) {
+            val properties = Properties().apply {
+                load(FileInputStream(propertiesFile))
+            }
+
+            localPropertiesMap.forEach { (propKey, envKey) ->
+                properties.getProperty(propKey)?.let { environment(envKey, it) }
+            }
         }
     }
 }
@@ -49,16 +53,20 @@ ktor {
         localImageName.set("volare-server")
         imageTag.set(version.toString())
 
-        val properties = Properties().apply {
-            load(FileInputStream(File(rootProject.rootDir, "local.properties")))
-        }
+        val propertiesFile = File(rootProject.rootDir, "local.properties")
 
-        localPropertiesMap.forEach { (propKey, envKey) ->
-            properties.getProperty(propKey)?.let { environmentVariable(envKey, it) }
-        }
+        if (propertiesFile.exists()) {
+            val properties = Properties().apply {
+                load(FileInputStream(propertiesFile))
+            }
 
-        localPropertiesMap.forEach { (propKey, envKey) ->
-            properties.getProperty("docker.$propKey")?.let { environmentVariable(envKey, it) }
+            localPropertiesMap.forEach { (propKey, envKey) ->
+                properties.getProperty(propKey)?.let { environmentVariable(envKey, it) }
+            }
+
+            localPropertiesMap.forEach { (propKey, envKey) ->
+                properties.getProperty("docker.$propKey")?.let { environmentVariable(envKey, it) }
+            }
         }
     }
 }

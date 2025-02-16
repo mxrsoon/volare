@@ -1,0 +1,74 @@
+on:
+  push:
+    branches:
+      - main
+
+name: Deploy to GCE
+
+jobs:
+  build:
+    name: Build server
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build Docker image
+        run: ./gradlew :server:buildImage
+
+      - id: archive-image
+        name: Archive Docker image
+        uses: actions/upload-artifact@v4
+        with:
+          name: volare-server
+          path: ./server/build/jib-image.tar
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - id: download-image
+        name: Download image
+        uses: actions/download-artifact@v4
+        with:
+          name: volare-server
+
+      - id: list-dir
+        name: List artifact directory
+        run: ls -lA .
+
+      - id: copy-image
+        name: Copy image to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.GCP_SSH_HOSTNAME }}
+          username: ${{ secrets.GCP_SSH_USERNAME }}
+          key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
+          source: ./jib-image.tar
+          target: /var/volare/images/
+          overwrite: true
+
+      - id: deploy-image
+        name: Deploy container
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.GCP_SSH_HOSTNAME }}
+          username: ${{ secrets.GCP_SSH_USERNAME }}
+          key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
+          script: |
+            sudo docker container stop volare-server
+            sudo docker container rm volare-server
+            sudo docker images rm -f volare-server
+            sudo docker load -i /var/volare/images/jib-image.tar
+            sudo rm -f /var/volare/images/jib-image.zip
+            sudo docker run --restart=always --env-file /var/volare/env.list --network volare --name volare-server -p 80:8080 -d volare-server
