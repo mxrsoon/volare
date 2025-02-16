@@ -115,7 +115,7 @@ private fun CollectionsScreen(
             ExtendedFloatingActionButton(
                 text = { Text(stringResource(Res.string.create_collection_label)) },
                 icon = { Icon(Icons.Outlined.Add, null) },
-                expanded = !gridState.lastScrolledForward,
+                expanded = gridState.firstVisibleItemIndex == 0 || gridState.lastScrolledBackward,
                 onClick = onCreateCollectionClick
             )
         }
