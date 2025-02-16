@@ -39,8 +39,14 @@ jobs:
       - id: 'ssh'
         name: 'SSH command'
         env:
+          SSH_USER: ${{ vars.GCP_SSH_USER }}
           SSH_SERVER_NAME: ${{ vars.GCP_SSH_SERVER_NAME }}
         run: |
           echo $USER
           cat ~/.ssh/config
-          ssh -F ~/.ssh/config $SSH_SERVER_NAME sudo ls -lA /var/volare
+          ssh ${SSH_USER}@${SSH_SERVER_NAME} \
+            -o "IdentitiesOnly=yes" \
+            -o "StrictHostKeyChecking no" \
+            -o "UserKnownHostsFile /dev/null" \
+            -i ~/.ssh/id_gcp
+            sudo ls -lA /var/volare
