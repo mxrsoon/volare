@@ -43,8 +43,8 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - id: download-image
-        name: Download image to server
+      - id: deploy-image
+        name: Deploy image to server
         uses: appleboy/ssh-action@v1.2.0
         env:
           IMAGE_URL: ${{ needs.build.outputs.image-url }}
@@ -52,4 +52,11 @@ jobs:
           host: ${{ secrets.GCP_SSH_HOSTNAME }}
           username: ${{ secrets.GCP_SSH_USERNAME }}
           key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
-          script: sudo curl --clobber -o /var/volare/volare-server.tar ${{ env.IMAGE_URL }}
+          script: |
+            sudo rm -f /var/volare/volare-server.tar
+            sudo curl -L -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -o /var/volare/volare-server.tar "${{ env.IMAGE_URL }}"
+            sudo docker container stop volare-server
+            sudo docker container rm volare-server
+            sudo docker images rm -f volare-server
+            sudo docker load -i /var/volare/volare-server.tar
+            sudo docker run --restart=always --env-file /var/volare/env.list --network volare --name volare-server -p 80:8080 -d volare-server
