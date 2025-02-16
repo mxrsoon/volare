@@ -23,8 +23,8 @@ jobs:
         name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v2'
         with:
-          project_id: '${{ vars.GCP_PROJECT_ID }}'
-          workload_identity_provider: '${{ vars.GCP_WIF_PROVIDER_NAME }}'
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER_NAME }}
 
       - id: 'setup-sdk'
         name: 'Set up Google Cloud SDK'
@@ -40,9 +40,9 @@ jobs:
         name: 'Start server container'
         uses: 'google-github-actions/ssh-compute@v1'
         with:
-          instance_name: '${{ vars.GCP_INSTANCE_NAME }}'
-          zone: '${{ vars.GCP_ZONE }}'
-          ssh_private_key: '${{ join(fromJson(secrets.GCP_SSH_PRIVATE_KEY), "\n") }}'
+          instance_name: ${{ vars.GCP_INSTANCE_NAME }}
+          zone: ${{ vars.GCP_ZONE }}
+          ssh_private_key: ${{ join(fromJson(secrets.GCP_SSH_PRIVATE_KEY), '\n') }}
           command: 'sudo ls -lA /var/volare'
 
       - name: 'Show Output'
