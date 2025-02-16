@@ -62,7 +62,7 @@ jobs:
           username: ${{ secrets.GCP_SSH_USERNAME }}
           key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
           source: ./jib-image.tar
-          target: /var/volare/
+          target: /var/volare/images/
           overwrite: true
 
 #      - id: deploy-image
@@ -75,12 +75,12 @@ jobs:
 #          username: ${{ secrets.GCP_SSH_USERNAME }}
 #          key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
 #          script: |
-#            sudo rm -f /var/volare/volare-server.zip
-#            sudo rm -f /var/volare/jib-image.tar
-#            sudo unzip /var/volare/volare-server.zip -d /var/volare/
-#            sudo rm -f /var/volare/volare-server.zip
+#            sudo rm -f /var/volare/images/volare-server.zip
+#            sudo rm -f /var/volare/images/jib-image.tar
+#            sudo unzip /var/volare/images/volare-server.zip -d /var/volare/images/
+#            sudo rm -f /var/volare/images/volare-server.zip
 #            sudo docker container stop volare-server
 #            sudo docker container rm volare-server
 #            sudo docker images rm -f volare-server
-#            sudo docker load -i /var/volare/jib-image.tar
+#            sudo docker load -i /var/volare/images/jib-image.tar
 #            sudo docker run --restart=always --env-file /var/volare/env.list --network volare --name volare-server -p 80:8080 -d volare-server
