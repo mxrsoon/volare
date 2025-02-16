@@ -1,0 +1,50 @@
+on:
+  push:
+    branches:
+      - 'main'
+      - 'feature/deploy-workflow'
+
+name: 'Deploy to GCE'
+
+jobs:
+  ssh:
+    runs-on: 'ubuntu-latest'
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      - name: 'Checkout'
+        uses: 'actions/checkout@v3'
+
+      # Configure Workload Identity Federation and generate an access token.
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          project_id: '${{ vars.GCP_PROJECT_ID }}'
+          workload_identity_provider: '${{ vars.GCP_WIF_PROVIDER_NAME }}'
+
+      - id: 'setup-sdk'
+        name: 'Set up Google Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+        with:
+          version: '>= 363.0.0'
+
+      - id: 'copy-image'
+        name: 'Copy image to instance'
+        run: 'gcloud info'
+
+      - id: 'start-container'
+        name: 'Start server container'
+        uses: 'google-github-actions/ssh-compute@v1'
+        with:
+          instance_name: '${{ vars.GCP_INSTANCE_NAME }}'
+          zone: '${{ vars.GCP_ZONE }}'
+          ssh_private_key: '${{ secrets.GCP_SSH_PRIVATE_KEY }}'
+          command: 'sudo ls -lA /var/volare'
+
+      - name: 'Show Output'
+        run: |-
+          echo '${{ steps.start-container.outputs.stdout }}'
+          echo '${{ steps.start-container.outputs.stderr }}'
