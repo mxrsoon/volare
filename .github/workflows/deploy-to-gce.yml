@@ -42,7 +42,7 @@ jobs:
         with:
           instance_name: ${{ vars.GCP_INSTANCE_NAME }}
           zone: ${{ vars.GCP_ZONE }}
-          ssh_private_key: ${{ join(fromJson(secrets.GCP_SSH_PRIVATE_KEY), '\n') }}
+          ssh_private_key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
           command: 'sudo ls -lA /var/volare'
 
       - name: 'Show Output'
