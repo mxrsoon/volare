@@ -24,7 +24,7 @@ jobs:
         uses: 'google-github-actions/auth@v2'
         with:
           project_id: '${{ vars.GCP_PROJECT_ID }}'
-          workload_identity_provider: 'projects/694838305957/locations/global/workloadIdentityPools/github/providers/volare'
+          workload_identity_provider: '${{ vars.GCP_WIF_PROVIDER_NAME }}'
 
       - id: 'setup-sdk'
         name: 'Set up Google Cloud SDK'
@@ -42,7 +42,7 @@ jobs:
         with:
           instance_name: '${{ vars.GCP_INSTANCE_NAME }}'
           zone: '${{ vars.GCP_ZONE }}'
-          ssh_private_key: '${{ secrets.GCP_SSH_PRIVATE_KEY }}'
+          ssh_private_key: '${{ secrets.GCP_SSH_PRIVATE_KEY.replace(/\\n/gm, "\n") }}'
           command: 'sudo ls -lA /var/volare'
 
       - name: 'Show Output'
