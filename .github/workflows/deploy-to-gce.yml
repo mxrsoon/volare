@@ -53,7 +53,7 @@ jobs:
           script: |
             sudo rm -f /var/volare/volare-server.zip
             sudo rm -f /var/volare/jib-image.tar
-            sudo curl -L -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -o /var/volare/volare-server.zip "${{ env.IMAGE_URL }}"
+            sudo curl -L -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -o /var/volare/volare-server.zip "${{ env.IMAGE_URL }}"
 #            sudo unzip /var/volare/volare-server.zip -d /var/volare/
 #            sudo rm -f /var/volare/volare-server.zip
 #            sudo docker container stop volare-server
