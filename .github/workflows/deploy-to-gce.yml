@@ -52,4 +52,4 @@ jobs:
           host: ${{ secrets.GCP_SSH_HOSTNAME }}
           username: ${{ secrets.GCP_SSH_USERNAME }}
           key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
-          script: sudo curl --clobber -o /var/volare/volare-server.tar $IMAGE_URL
+          script: sudo curl --clobber -o /var/volare/volare-server.tar ${{ env.IMAGE_URL }}
