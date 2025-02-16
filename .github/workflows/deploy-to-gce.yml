@@ -29,11 +29,11 @@ jobs:
           echo $USER
           mkdir -p ~/.ssh
           chmod 0700 ~/.ssh
-          echo $SSH_PRIV_KEY > ~/.ssh/id_gcp
-          echo $SSH_PUB_KEY > ~/.ssh/id_gcp.pub
+          echo $SSH_PRIV_KEY > ~/.ssh/id_rsa
+          echo $SSH_PUB_KEY > ~/.ssh/id_rsa.pub
           echo $SSH_CONFIG > ~/.ssh/config
-          chmod 600 ~/.ssh/id_gcp
-          chmod 600 ~/.ssh/id_gcp.pub
+          chmod 600 ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa.pub
           chmod 600 ~/.ssh/config
           cat ~/.ssh/config
           rm -f ~/.ssh/known_hosts
@@ -49,8 +49,6 @@ jobs:
           cat ~/.ssh/config
           ssh -vvv $SSH_USER@$SSH_SERVER_NAME \
             -l $SSH_USER \
-            -o "IdentitiesOnly=yes" \
             -o "StrictHostKeyChecking no" \
             -o "UserKnownHostsFile /dev/null" \
-            -i ~/.ssh/id_gcp \
             sudo ls -lA /var/volare
