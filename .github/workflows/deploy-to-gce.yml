@@ -18,29 +18,17 @@ jobs:
       - name: 'Checkout'
         uses: 'actions/checkout@v3'
 
-      # Configure Workload Identity Federation and generate an access token.
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v2'
-        with:
-          project_id: ${{ vars.GCP_PROJECT_ID }}
-          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER_NAME }}
-
-      - id: 'setup-sdk'
-        name: 'Set up Google Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v2'
-        with:
-          version: '>= 363.0.0'
-
-      - id: 'gcloud-info'
-        name: 'SSH command'
-        run: 'gcloud info'
+      - id: 'setup-ssh-keys'
+        name: 'Setup SSH keys'
+        env:
+          SSH_PRIV_KEY: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
+          SSH_PUB_KEY: ${{ secrets.GCP_SSH_PUBLIC_KEY }}
+          SSH_CONFIG: ${{ secrets.GCP_SSH_CONFIG }}
+        run: |
+          echo $SSH_PRIV_KEY > ~/.ssh/id_gcp
+          echo $SSH_PUB_KEY > ~/.ssh/id_gcp.pub
+          echo SSH_CONFIG > ~/.ssh/config
 
       - id: 'ssh'
         name: 'SSH command'
-        run: 'gcloud compute ssh --zone "us-west1-a" "volare-server" --project "volare-app" --command="sudo ls -lA /var/volare"'
-
-      - name: 'Show Output'
-        run: |-
-          echo '${{ steps.ssh.outputs.stdout }}'
-          echo '${{ steps.ssh.outputs.stderr }}'
+        run: 'ssh volare-server --command="sudo ls -lA /var/volare"'
