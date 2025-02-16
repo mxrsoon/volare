@@ -1,0 +1,33 @@
+on:
+  push:
+    branches:
+      - main
+
+name: Build Android app
+
+jobs:
+  build:
+    name: Build Android app
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build Android app
+        run: ./gradlew :composeApp:assembleAndroidDebug
+
+      - id: archive-apk
+        name: Archive APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-app
+          path: ./composeApp/build/outputs/apk/debug/app-debug.apk
