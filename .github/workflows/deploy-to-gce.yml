@@ -32,6 +32,10 @@ jobs:
         with:
           version: '>= 363.0.0'
 
+      - id: 'gcloud-info'
+        name: 'SSH command'
+        run: 'gcloud info'
+
       - id: 'ssh'
         name: 'SSH command'
         run: 'gcloud compute ssh --zone "us-west1-a" "volare-server" --project "volare-app" --command="sudo ls -lA /var/volare"'
