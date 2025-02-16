@@ -58,10 +58,10 @@ jobs:
             sudo rm -f /var/volare/volare-server.zip
             sudo rm -f /var/volare/jib-image.tar
             sudo curl -L -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -o /var/volare/volare-server.zip "${{ env.IMAGE_URL }}"
-            sudo unzip /var/volare/volare-server.zip -d /var/volare/
-            sudo rm -f /var/volare/volare-server.zip
-            sudo docker container stop volare-server
-            sudo docker container rm volare-server
-            sudo docker images rm -f volare-server
-            sudo docker load -i /var/volare/jib-image.tar
-            sudo docker run --restart=always --env-file /var/volare/env.list --network volare --name volare-server -p 80:8080 -d volare-server
+#            sudo unzip /var/volare/volare-server.zip -d /var/volare/
+#            sudo rm -f /var/volare/volare-server.zip
+#            sudo docker container stop volare-server
+#            sudo docker container rm volare-server
+#            sudo docker images rm -f volare-server
+#            sudo docker load -i /var/volare/jib-image.tar
+#            sudo docker run --restart=always --env-file /var/volare/env.list --network volare --name volare-server -p 80:8080 -d volare-server
