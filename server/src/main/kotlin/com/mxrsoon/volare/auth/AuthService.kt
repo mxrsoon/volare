@@ -77,6 +77,7 @@ class AuthService(
         val idToken = googleIdVerifier.verify(idTokenString) ?: throw IllegalStateException("Unable to authenticate")
         val payload = idToken.payload
         val googleId = payload.subject
+        val email = payload.email
 
         val user = userRepository.findByGoogleId(googleId)
             ?: userRepository.findByEmail(email)?.apply {
@@ -87,7 +88,7 @@ class AuthService(
                 User(
                     firstName = payload["given_name"] as String,
                     lastName = payload["family_name"] as? String,
-                    email = null,
+                    email = email,
                     password = null,
                     googleId = googleId
                 )
