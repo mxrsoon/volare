@@ -36,7 +36,7 @@ jobs:
           chmod 600 ~/.ssh/id_gcp.pub
           chmod 600 ~/.ssh/config
           cat ~/.ssh/config
-          ssh-keygen -R $SSH_SERVER_NAME
+          rm -f ~/.ssh/known_hosts
 
       - id: 'ssh'
         name: 'SSH command'
