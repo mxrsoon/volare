@@ -28,6 +28,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -55,6 +56,7 @@ import com.mxrsoon.volare.common.ui.padding.plus
 import com.mxrsoon.volare.common.ui.theme.VolareTheme
 import com.mxrsoon.volare.composeapp.generated.resources.Res
 import com.mxrsoon.volare.composeapp.generated.resources.add_20px
+import com.mxrsoon.volare.composeapp.generated.resources.cancel_label
 import com.mxrsoon.volare.composeapp.generated.resources.collection_name
 import com.mxrsoon.volare.composeapp.generated.resources.collections_label
 import com.mxrsoon.volare.composeapp.generated.resources.create_collection_label
@@ -253,6 +255,7 @@ private fun CreateCollectionSheet(
                 .padding(bottom = 24.dp),
             collectionName = collectionName,
             onCollectionNameChange = onCollectionNameChange,
+            onDismissRequest = onDismissRequest,
             onConfirm = onConfirm
         )
     }
@@ -262,6 +265,7 @@ private fun CreateCollectionSheet(
 private fun CreateCollectionSheetContents(
     collectionName: String,
     onCollectionNameChange: (String) -> Unit,
+    onDismissRequest: () -> Unit,
     onConfirm: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -288,6 +292,10 @@ private fun CreateCollectionSheetContents(
             horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.End),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            OutlinedButton(onClick = onDismissRequest) {
+                Text(stringResource(Res.string.cancel_label))
+            }
+
             Button(
                 onClick = onConfirm,
                 enabled = collectionName.isNotBlank(),
@@ -344,8 +352,7 @@ private fun CreateCollectionSheetContentsPreview() {
         platformColorScheme = false,
         darkMode = true
     ) {
-        Box(
-            Modifier.background(MaterialTheme.colorScheme.surfaceContainer)) {
+        Box(Modifier.background(MaterialTheme.colorScheme.surfaceContainer)) {
             CreateCollectionSheetContents(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -353,6 +360,7 @@ private fun CreateCollectionSheetContentsPreview() {
                     .padding(vertical = 24.dp),
                 collectionName = "Compras",
                 onCollectionNameChange = {},
+                onDismissRequest = {},
                 onConfirm = {}
             )
         }
