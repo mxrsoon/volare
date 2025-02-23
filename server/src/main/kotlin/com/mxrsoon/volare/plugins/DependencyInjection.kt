@@ -26,7 +26,8 @@ fun Application.configureDependencyInjection() {
                 single { RefreshTokenRepository() }
                 single { AuthService(get(), get(), get(), get(), get()) }
                 single { CollectionRepository() }
-                single { CollectionService(get()) }
+                single { ItemRepository() }
+                single { CollectionService(get(), get()) }
             }
         )
     }
