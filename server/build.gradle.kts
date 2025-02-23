@@ -20,6 +20,7 @@ application {
 }
 
 tasks {
+    @Suppress("unused")
     val run by getting(JavaExec::class) {
         loadEnvFile { key, value -> environment(key, value) }
     }
