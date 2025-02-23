@@ -51,6 +51,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mxrsoon.volare.collection.Collection
+import com.mxrsoon.volare.collection.CollectionListEntry
 import com.mxrsoon.volare.common.ui.dialog.ErrorDialog
 import com.mxrsoon.volare.common.ui.padding.plus
 import com.mxrsoon.volare.common.ui.theme.VolareTheme
@@ -69,8 +70,7 @@ import com.mxrsoon.volare.composeapp.generated.resources.loading_error_message
 import com.mxrsoon.volare.composeapp.generated.resources.loading_error_title
 import com.mxrsoon.volare.composeapp.generated.resources.more_vert_24px
 import com.mxrsoon.volare.composeapp.generated.resources.open_context_menu_label
-import kotlin.random.Random
-import kotlin.random.nextInt
+import kotlinx.datetime.Clock
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -123,7 +123,7 @@ private fun CollectionsScreen(
         }
     ) { innerPadding ->
         val contentPadding = innerPadding + 16.dp
-        val collections = uiState.collections.orEmpty()
+        val entries = uiState.entries.orEmpty()
 
         LazyVerticalStaggeredGrid(
             modifier = Modifier
@@ -137,15 +137,15 @@ private fun CollectionsScreen(
             contentPadding = contentPadding,
             content = {
                 items(
-                    items = collections,
-                    key = { collection -> collection.id }
-                ) { collection ->
-                    CollectionListItem(
+                    items = entries,
+                    key = { entry -> entry.collection.id }
+                ) { entry ->
+                    CollectionCard(
                         modifier = Modifier
                             .fillMaxWidth()
                             .wrapContentHeight(),
-                        item = collection,
-                        onDeleteClick = { onDeleteCollectionClick(collection) }
+                        entry = entry,
+                        onDeleteClick = { onDeleteCollectionClick(entry.collection) }
                     )
                 }
             }
@@ -172,8 +172,8 @@ private fun CollectionsScreen(
 }
 
 @Composable
-private fun CollectionListItem(
-    item: Collection,
+private fun CollectionCard(
+    entry: CollectionListEntry,
     onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -195,12 +195,12 @@ private fun CollectionListItem(
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Text(
-                    text = item.name,
+                    text = entry.collection.name,
                     style = MaterialTheme.typography.titleMedium
                 )
 
                 Text(
-                    text = stringResource(Res.string.item_count_format, Random.nextInt(1..20)),
+                    text = stringResource(Res.string.item_count_format, entry.itemCount),
                     style = MaterialTheme.typography.bodyMedium
                 )
 
@@ -326,11 +326,15 @@ private fun CollectionsScreenPreview() {
         CollectionsScreen(
             uiState = CollectionsUiState(
                 loading = false,
-                collections = listOf(
-                    Collection(
-                        id = "1",
-                        name = "Compras",
-                        creatorId = "1"
+                entries = listOf(
+                    CollectionListEntry(
+                        collection = Collection(
+                            id = "1",
+                            name = "Compras",
+                            creatorId = "1",
+                            createdAt = Clock.System.now()
+                        ),
+                        itemCount = 5
                     )
                 ),
                 showCollectionCreation = false
@@ -374,11 +378,15 @@ private fun CollectionListItemPreview() {
         platformColorScheme = false,
         darkMode = true
     ) {
-        CollectionListItem(
-            item = Collection(
-                id = "1",
-                name = "Compras",
-                creatorId = "1"
+        CollectionCard(
+            entry = CollectionListEntry(
+                collection = Collection(
+                    id = "1",
+                    name = "Compras",
+                    creatorId = "1",
+                    createdAt = Clock.System.now()
+                ),
+                itemCount = 5
             ),
             onDeleteClick = {}
         )

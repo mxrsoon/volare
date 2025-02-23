@@ -18,8 +18,8 @@ fun Route.collectionRoutes() = route("collections") {
 
     authenticate {
         get {
-            val collections = service.getAll(call.authenticatedUserId)
-            call.respond(HttpStatusCode.OK, collections)
+            val entries = service.getAll(call.authenticatedUserId)
+            call.respond(HttpStatusCode.OK, entries)
         }
 
         get("{id}") {

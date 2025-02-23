@@ -85,6 +85,7 @@ dependencies {
     implementation(libs.ktor.server.status.pages)
     implementation(libs.exposed.core)
     implementation(libs.exposed.jdbc)
+    implementation(libs.exposed.kotlin.datetime)
     implementation(libs.postgresql.jdbc)
     implementation(libs.h2)
     implementation(libs.logback.classic)

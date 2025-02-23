@@ -1,6 +1,7 @@
 package com.mxrsoon.volare.collections
 
 import com.mxrsoon.volare.collection.Collection
+import com.mxrsoon.volare.collection.CollectionListEntry
 import com.mxrsoon.volare.collection.CreateCollectionRequest
 import com.mxrsoon.volare.common.network.configuredHttpClient
 import io.ktor.client.HttpClient
@@ -17,7 +18,7 @@ class CollectionsRepository(private val client: HttpClient = configuredHttpClien
     /**
      * Retrieves all collections available to the current user.
      */
-    suspend fun getAll(): List<Collection> {
+    suspend fun getAll(): List<CollectionListEntry> {
         val response = client.get("collections")
         return response.body()
     }

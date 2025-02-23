@@ -30,11 +30,11 @@ class CollectionsViewModel(
      */
     private fun getCollections() {
         viewModelScope.launch {
-            uiState = uiState.copy(loading = true, collections = null, loadingError = false)
+            uiState = uiState.copy(loading = true, entries = null, loadingError = false)
             
             try {
                 val response = repository.getAll()
-                uiState = uiState.copy(collections = response)
+                uiState = uiState.copy(entries = response)
             } catch (error: Throwable) {
                 uiState = uiState.copy(loadingError = true)
             } finally {
