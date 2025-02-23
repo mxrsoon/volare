@@ -28,17 +28,11 @@ class CollectionRepository {
         val result = Collections.insert {
             it[name] = collection.name
             it[creatorId] = UUID.fromString(collection.creatorId)
+            it[createdAt] = collection.createdAt
         }
 
         result.resultedValues?.singleOrNull()?.toCollection()
             ?: throw IllegalStateException("Unable to create collection")
-    }
-
-    /**
-     * Retrieves a list of all collections from the database.
-     */
-    suspend fun list(): List<Collection> = dbQuery {
-        Collections.selectAll().map { it.toCollection() }
     }
 
     /**
@@ -66,7 +60,6 @@ class CollectionRepository {
     suspend fun update(id: String, collection: Collection): Collection = dbQuery {
         Collections.updateReturning(where = { Collections.id eq UUID.fromString(id) }) {
             it[name] = collection.name
-            it[creatorId] = UUID.fromString(collection.creatorId)
         }.single().toCollection()
     }
 

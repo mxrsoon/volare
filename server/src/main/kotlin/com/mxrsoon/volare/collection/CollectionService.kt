@@ -1,12 +1,15 @@
 package com.mxrsoon.volare.collection
 
+import com.mxrsoon.volare.item.ItemRepository
 import io.ktor.server.plugins.NotFoundException
+import kotlinx.datetime.Clock
 
 /**
  * Service for managing collections.
  */
 class CollectionService(
-    private val repository: CollectionRepository
+    private val repository: CollectionRepository,
+    private val itemRepository: ItemRepository
 ) {
 
     /**
@@ -27,8 +30,13 @@ class CollectionService(
     /**
      * Retrieves all collections created by a specific user.
      */
-    suspend fun getAll(loggedUserId: String): List<Collection> =
-        repository.findByCreatorId(loggedUserId)
+    suspend fun getAll(loggedUserId: String): List<CollectionListEntry> =
+        repository.findByCreatorId(loggedUserId).map { collection ->
+            CollectionListEntry(
+                collection = collection,
+                itemCount = itemRepository.countByCollectionId(collection.id)
+            )
+        }
 
     /**
      * Creates a new collection.
@@ -37,7 +45,8 @@ class CollectionService(
         repository.create(
             Collection(
                 name = request.name,
-                creatorId = loggedUserId
+                creatorId = loggedUserId,
+                createdAt = Clock.System.now()
             )
         )
 
