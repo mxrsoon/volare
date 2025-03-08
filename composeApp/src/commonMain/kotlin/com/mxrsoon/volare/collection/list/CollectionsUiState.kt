@@ -1,4 +1,4 @@
-package com.mxrsoon.volare.collections
+package com.mxrsoon.volare.collection.list
 
 import com.mxrsoon.volare.collection.CollectionListEntry
 

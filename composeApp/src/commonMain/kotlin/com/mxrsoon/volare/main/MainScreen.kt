@@ -20,11 +20,15 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import com.mxrsoon.volare.collections.CollectionsRoute
-import com.mxrsoon.volare.collections.CollectionsScreen
+import androidx.navigation.toRoute
+import com.mxrsoon.volare.collection.list.CollectionsRoute
+import com.mxrsoon.volare.collection.list.CollectionsScreen
 import com.mxrsoon.volare.home.HomeRoute
 import com.mxrsoon.volare.home.HomeScreen
+import com.mxrsoon.volare.item.list.ItemsRoute
+import com.mxrsoon.volare.item.list.ItemsScreen
 import com.mxrsoon.volare.search.SearchRoute
 import com.mxrsoon.volare.search.SearchScreen
 import org.jetbrains.compose.resources.painterResource
@@ -64,11 +68,40 @@ fun MainScreen(
         NavHost(
             modifier = Modifier.fillMaxSize().imePadding(),
             navController = navController,
-            startDestination = HomeRoute
+            startDestination = HomeTabRoute
         ) {
-            composable<HomeRoute> { HomeScreen(onSignOut = onSignOut) }
-            composable<SearchRoute> { SearchScreen() }
-            composable<CollectionsRoute> { CollectionsScreen() }
+            navigation<HomeTabRoute>(startDestination = HomeRoute) {
+                composable<HomeRoute> { HomeScreen(onSignOut = onSignOut) }
+            }
+
+            navigation<SearchTabRoute>(startDestination = SearchRoute) {
+                composable<SearchRoute> { SearchScreen() }
+            }
+
+            navigation<CollectionsTabRoute>(startDestination = CollectionsRoute) {
+                composable<CollectionsRoute> {
+                    CollectionsScreen(
+                        onCollectionClick = { collection ->
+                            navController.navigate(
+                                ItemsRoute(
+                                    collectionId = collection.id,
+                                    collectionName = collection.name
+                                )
+                            )
+                        }
+                    )
+                }
+
+                composable<ItemsRoute> { entry ->
+                    val route = entry.toRoute<ItemsRoute>()
+
+                    ItemsScreen(
+                        collectionId = route.collectionId,
+                        collectionName = route.collectionName,
+                        onBackRequest = { navController.popBackStack() }
+                    )
+                }
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.mxrsoon.volare.collections
+package com.mxrsoon.volare.collection.list
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -77,10 +77,12 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun CollectionsScreen(
+    onCollectionClick: (Collection) -> Unit,
     viewModel: CollectionsViewModel = viewModel { CollectionsViewModel() }
 ) {
     CollectionsScreen(
         uiState = viewModel.uiState,
+        onCollectionClick = onCollectionClick,
         onCreateCollectionClick = { viewModel.showCollectionCreation() },
         onDismissErrorRequest = { viewModel.dismissActionError() },
         onDismissCollectionCreationRequest = { viewModel.dismissCollectionCreation() },
@@ -94,6 +96,7 @@ fun CollectionsScreen(
 @Composable
 private fun CollectionsScreen(
     uiState: CollectionsUiState,
+    onCollectionClick: (Collection) -> Unit,
     onCreateCollectionClick: () -> Unit,
     onDismissErrorRequest: () -> Unit,
     onDismissCollectionCreationRequest: () -> Unit,
@@ -145,6 +148,7 @@ private fun CollectionsScreen(
                             .fillMaxWidth()
                             .wrapContentHeight(),
                         entry = entry,
+                        onClick = { onCollectionClick(entry.collection) },
                         onDeleteClick = { onDeleteCollectionClick(entry.collection) }
                     )
                 }
@@ -174,6 +178,7 @@ private fun CollectionsScreen(
 @Composable
 private fun CollectionCard(
     entry: CollectionListEntry,
+    onClick: () -> Unit,
     onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -181,7 +186,7 @@ private fun CollectionCard(
 
     OutlinedCard(
         modifier = modifier,
-        onClick = {}
+        onClick = onClick
     ) {
         Row(
             modifier = Modifier
@@ -339,6 +344,7 @@ private fun CollectionsScreenPreview() {
                 ),
                 showCollectionCreation = false
             ),
+            onCollectionClick = {},
             onCreateCollectionClick = {},
             onDismissErrorRequest = {},
             onDismissCollectionCreationRequest = {},
@@ -388,6 +394,7 @@ private fun CollectionListItemPreview() {
                 ),
                 itemCount = 5
             ),
+            onClick = {},
             onDeleteClick = {}
         )
     }

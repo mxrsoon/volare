@@ -1,6 +1,5 @@
 package com.mxrsoon.volare.user
 
-import com.mxrsoon.volare.auth.RegisterRequest
 import io.ktor.server.plugins.NotFoundException
 
 /**

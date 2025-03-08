@@ -1,4 +1,4 @@
-package com.mxrsoon.volare.collections
+package com.mxrsoon.volare.collection.list
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -6,13 +6,14 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mxrsoon.volare.collection.Collection
+import com.mxrsoon.volare.collection.CollectionRepository
 import kotlinx.coroutines.launch
 
 /**
  * View model for the collections screen.
  */
 class CollectionsViewModel(
-    private val repository: CollectionsRepository = CollectionsRepository()
+    private val repository: CollectionRepository = CollectionRepository()
 ) : ViewModel() {
 
     /**

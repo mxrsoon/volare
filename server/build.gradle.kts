@@ -11,18 +11,6 @@ plugins {
 group = "com.mxrsoon.volare"
 version = "1.0.0"
 
-val localPropertiesMap = mapOf(
-    "db.url" to "DB_URL",
-    "db.user" to "DB_USER",
-    "db.password" to "DB_PASSWORD",
-    "jwt.secret" to "JWT_SECRET",
-    "jwt.issuer" to "JWT_ISSUER",
-    "jwt.audience" to "JWT_AUDIENCE",
-    "jwt.realm" to "JWT_REALM",
-    "oauth.google.client-id" to "OAUTH_GOOGLE_CLIENT_ID",
-    "oauth.google.secret" to "OAUTH_GOOGLE_CLIENT_SECRET"
-)
-
 application {
     mainClass.set("com.mxrsoon.volare.ApplicationKt")
 
@@ -32,18 +20,9 @@ application {
 }
 
 tasks {
+    @Suppress("unused")
     val run by getting(JavaExec::class) {
-        val propertiesFile = File(rootProject.rootDir, "local.properties")
-
-        if (propertiesFile.exists()) {
-            val properties = Properties().apply {
-                load(FileInputStream(propertiesFile))
-            }
-
-            localPropertiesMap.forEach { (propKey, envKey) ->
-                properties.getProperty(propKey)?.let { environment(envKey, it) }
-            }
-        }
+        loadEnvFile { key, value -> environment(key, value) }
     }
 }
 
@@ -53,21 +32,7 @@ ktor {
         localImageName.set("volare-server")
         imageTag.set(version.toString())
 
-        val propertiesFile = File(rootProject.rootDir, "local.properties")
-
-        if (propertiesFile.exists()) {
-            val properties = Properties().apply {
-                load(FileInputStream(propertiesFile))
-            }
-
-            localPropertiesMap.forEach { (propKey, envKey) ->
-                properties.getProperty(propKey)?.let { environmentVariable(envKey, it) }
-            }
-
-            localPropertiesMap.forEach { (propKey, envKey) ->
-                properties.getProperty("docker.$propKey")?.let { environmentVariable(envKey, it) }
-            }
-        }
+        loadEnvFile { key, value -> environmentVariable(key, value) }
     }
 }
 
@@ -94,4 +59,18 @@ dependencies {
     implementation(libs.kotlinx.datetime)
     implementation(libs.jbcrypt)
     implementation(libs.google.api.client)
+}
+
+private fun loadEnvFile(fileName: String = ".env", action: (String, String) -> Unit) {
+    val propertiesFile = File(rootProject.rootDir, fileName)
+
+    if (propertiesFile.exists()) {
+        val properties = Properties().apply {
+            load(FileInputStream(propertiesFile))
+        }
+
+        properties.forEach { key, value ->
+            action(key.toString(), value.toString())
+        }
+    }
 }

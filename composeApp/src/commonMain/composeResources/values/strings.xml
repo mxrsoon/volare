@@ -31,4 +31,8 @@
     <string name="create_label">Criar</string>
     <string name="open_context_menu_label">Abrir menu de opções</string>
     <string name="delete_label">Apagar</string>
+    <string name="add_item_label">Adicionar item</string>
+    <string name="item_name">Nome do item</string>
+    <string name="back_label">Voltar</string>
+    <string name="created_at_format">Criado em %1$s</string>
 </resources>
