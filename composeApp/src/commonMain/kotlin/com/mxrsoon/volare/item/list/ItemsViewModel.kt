@@ -43,8 +43,6 @@ class ItemsViewModel(
      */
     private fun getItems(fromRefresh: Boolean = false) {
         viewModelScope.launch {
-            uiState = uiState.copy(loading = true, entries = null, loadingError = false)
-
             uiState = uiState.copy(
                 loading = !fromRefresh,
                 entries = if (fromRefresh) uiState.entries else null,
