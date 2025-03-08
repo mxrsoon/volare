@@ -37,6 +37,9 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -100,7 +103,8 @@ fun ItemsScreen(
         onDismissItemCreationRequest = { viewModel.dismissItemCreation() },
         onNewItemNameChange = { viewModel.setNewItemName(it) },
         onCreateItemRequest = { viewModel.createItem() },
-        onDeleteItemClick = { viewModel.deleteItem(it) }
+        onDeleteItemClick = { viewModel.deleteItem(it) },
+        onRefresh = { viewModel.refresh() }
     )
 }
 
@@ -115,7 +119,8 @@ private fun ItemsScreen(
     onDismissItemCreationRequest: () -> Unit,
     onNewItemNameChange: (String) -> Unit,
     onCreateItemRequest: () -> Unit,
-    onDeleteItemClick: (Item) -> Unit
+    onDeleteItemClick: (Item) -> Unit,
+    onRefresh: () -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val gridState = rememberLazyStaggeredGridState()
@@ -149,32 +154,48 @@ private fun ItemsScreen(
         val contentPadding = innerPadding + 16.dp
         val fabPadding = PaddingValues(bottom = 72.dp)
         val entries = uiState.entries.orEmpty()
+        val pullToRefreshState = rememberPullToRefreshState()
 
-        LazyVerticalStaggeredGrid(
-            modifier = Modifier
-                .nestedScroll(scrollBehavior.nestedScrollConnection)
-                .consumeWindowInsets(contentPadding)
-                .fillMaxSize(),
-            state = gridState,
-            columns = StaggeredGridCells.Adaptive(240.dp),
-            verticalItemSpacing = 8.dp,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = contentPadding + fabPadding,
-            content = {
-                items(
-                    items = entries,
-                    key = { entry -> entry.id }
-                ) { entry ->
-                    ItemCard(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight(),
-                        entry = entry,
-                        onDeleteClick = { onDeleteItemClick(entry) }
-                    )
-                }
+        PullToRefreshBox(
+            isRefreshing = uiState.refreshing,
+            onRefresh = onRefresh,
+            state = pullToRefreshState,
+            indicator = {
+                Indicator(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .padding(innerPadding),
+                    isRefreshing = uiState.refreshing,
+                    state = pullToRefreshState
+                )
             }
-        )
+        ) {
+            LazyVerticalStaggeredGrid(
+                modifier = Modifier
+                    .nestedScroll(scrollBehavior.nestedScrollConnection)
+                    .consumeWindowInsets(contentPadding)
+                    .fillMaxSize(),
+                state = gridState,
+                columns = StaggeredGridCells.Adaptive(240.dp),
+                verticalItemSpacing = 8.dp,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = contentPadding + fabPadding,
+                content = {
+                    items(
+                        items = entries,
+                        key = { entry -> entry.id }
+                    ) { entry ->
+                        ItemCard(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight(),
+                            entry = entry,
+                            onDeleteClick = { onDeleteItemClick(entry) }
+                        )
+                    }
+                }
+            )
+        }
     }
 
     if (uiState.actionError) {
@@ -384,7 +405,8 @@ private fun ItemsScreenPreview() {
             onDismissItemCreationRequest = {},
             onNewItemNameChange = {},
             onCreateItemRequest = {},
-            onDeleteItemClick = {}
+            onDeleteItemClick = {},
+            onRefresh = {}
         )
     }
 }

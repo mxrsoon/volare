@@ -4,6 +4,7 @@ import com.mxrsoon.volare.item.Item
 
 data class ItemsUiState(
     val loading: Boolean = false,
+    val refreshing: Boolean = false,
     val entries: List<Item>? = null,
     val loadingError: Boolean = false,
     val actionError: Boolean = false,
