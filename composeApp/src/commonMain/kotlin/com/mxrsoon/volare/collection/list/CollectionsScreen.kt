@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -131,6 +132,7 @@ private fun CollectionsScreen(
         }
     ) { innerPadding ->
         val contentPadding = innerPadding + 16.dp
+        val fabPadding = PaddingValues(bottom = 72.dp)
         val entries = uiState.entries.orEmpty()
         val pullToRefreshState = rememberPullToRefreshState()
 
@@ -157,7 +159,7 @@ private fun CollectionsScreen(
                 columns = StaggeredGridCells.Adaptive(240.dp),
                 verticalItemSpacing = 8.dp,
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = contentPadding,
+                contentPadding = contentPadding + fabPadding,
                 content = {
                     items(
                         items = entries,
