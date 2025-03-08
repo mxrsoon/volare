@@ -14,7 +14,6 @@ class CollectionService(
 
     /**
      * Retrieves a collection by its ID.
-     *
      * @throws NotFoundException If no collection with the specified ID is found.
      */
     suspend fun get(id: String, loggedUserId: String): Collection {
@@ -28,7 +27,7 @@ class CollectionService(
     }
 
     /**
-     * Retrieves all collections created by a specific user.
+     * Retrieves all collections created by the authenticated user.
      */
     suspend fun getAll(loggedUserId: String): List<CollectionListEntry> =
         repository.findByCreatorId(loggedUserId).map { collection ->

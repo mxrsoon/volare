@@ -1,4 +1,4 @@
-package com.mxrsoon.volare.collection
+package com.mxrsoon.volare.item
 
 import com.mxrsoon.volare.auth.authenticatedUserId
 import com.mxrsoon.volare.common.koin.inject
@@ -12,32 +12,37 @@ import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
 
-fun Route.collectionRoutes() = route("collections") {
+fun Route.itemRoutes() = route("items") {
 
-    val service by inject<CollectionService>()
+    val service by inject<ItemService>()
 
     authenticate {
         get {
-            val entries = service.getAll(call.authenticatedUserId)
+            val entries = service.getAll(
+                collectionId = call.parameters["collectionId"]
+                    ?: throw IllegalArgumentException("Invalid collection ID"),
+                loggedUserId = call.authenticatedUserId
+            )
+
             call.respond(HttpStatusCode.OK, entries)
         }
 
         get("{id}") {
-            val collection = service.get(
+            val item = service.get(
                 id = call.parameters["id"] ?: throw IllegalArgumentException("Invalid ID"),
                 loggedUserId = call.authenticatedUserId
             )
 
-            call.respond(HttpStatusCode.OK, collection)
+            call.respond(HttpStatusCode.OK, item)
         }
 
         post {
-            val collection = service.create(
-                request = call.receive<CreateCollectionRequest>(),
+            val item = service.create(
+                request = call.receive<CreateItemRequest>(),
                 loggedUserId = call.authenticatedUserId
             )
 
-            call.respond(HttpStatusCode.Created, collection)
+            call.respond(HttpStatusCode.Created, item)
         }
 
         delete("{id}") {
