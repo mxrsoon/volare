@@ -1,6 +1,5 @@
 package com.mxrsoon.volare
 
-import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,11 +33,7 @@ fun App(
 
             NavHost(
                 navController = navController,
-                startDestination = RootRoute,
-                enterTransition = { slideIntoContainer(SlideDirection.Start) },
-                exitTransition = { slideOutOfContainer(SlideDirection.Start) },
-                popEnterTransition = { slideIntoContainer(SlideDirection.End) },
-                popExitTransition = { slideOutOfContainer(SlideDirection.End) }
+                startDestination = RootRoute
             ) {
                 navigation<RootRoute>(startDestination = LoginRoute()) {
                     composable<LoginRoute> { entry ->
