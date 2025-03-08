@@ -13,5 +13,5 @@ data class Item(
     val creatorId: String,
     val collectionId: String,
     val createdAt: Instant,
-    val url: String
+    val url: String?
 )

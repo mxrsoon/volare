@@ -14,5 +14,5 @@ object Items : UUIDTable() {
     val creatorId = reference("creatorId", Users, onDelete = ReferenceOption.CASCADE)
     val collectionId = reference("collectionId", Collections, onDelete = ReferenceOption.CASCADE)
     val createdAt = timestamp("createdAt")
-    val url = varchar("url", length = 254)
+    val url = varchar("url", length = 254).nullable()
 }

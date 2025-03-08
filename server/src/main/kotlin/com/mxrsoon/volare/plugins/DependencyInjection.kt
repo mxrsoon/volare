@@ -5,6 +5,7 @@ import com.mxrsoon.volare.auth.refresh.RefreshTokenRepository
 import com.mxrsoon.volare.collection.CollectionRepository
 import com.mxrsoon.volare.collection.CollectionService
 import com.mxrsoon.volare.item.ItemRepository
+import com.mxrsoon.volare.item.ItemService
 import com.mxrsoon.volare.user.UserRepository
 import com.mxrsoon.volare.user.UserService
 import io.ktor.server.application.Application
@@ -29,6 +30,7 @@ fun Application.configureDependencyInjection() {
                 single { CollectionRepository() }
                 single { CollectionService(get(), get()) }
                 single { ItemRepository() }
+                single { ItemService(get(), get()) }
             }
         )
     }

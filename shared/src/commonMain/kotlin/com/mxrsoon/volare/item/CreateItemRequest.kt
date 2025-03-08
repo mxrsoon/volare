@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class CreateItemRequest(
     val name: String,
     val collectionId: String,
-    val url: String
+    val url: String?
 )
