@@ -89,7 +89,7 @@ class CollectionsViewModel(
         viewModelScope.launch {
             try {
                 repository.create(name = uiState.newCollectionName)
-                getCollections()
+                refresh()
             } catch (error: Throwable) {
                 uiState = uiState.copy(actionError = true)
             }
@@ -103,7 +103,7 @@ class CollectionsViewModel(
         viewModelScope.launch {
             try {
                 repository.delete(id = collection.id)
-                getCollections()
+                refresh()
             } catch (error: Throwable) {
                 uiState = uiState.copy(actionError = true)
             }
