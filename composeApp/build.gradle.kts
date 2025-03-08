@@ -31,17 +31,22 @@ kotlin {
             isStatic = true
         }
     }
+
+    applyDefaultHierarchyTemplate()
     
     sourceSets {
-        val desktopMain by getting
+        val commonMain by getting
 
-        androidMain.dependencies {
-            implementation(compose.preview)
-            implementation(libs.androidx.activity.compose)
-            implementation(libs.androidx.splashscreen)
-            implementation(libs.androidx.credentials)
-            implementation(libs.androidx.credentials.auth)
-            implementation(libs.google.identity.googleid)
+        val jvmAndAndroidMain by creating {
+            dependsOn(commonMain)
+        }
+
+        val desktopMain by getting {
+            dependsOn(jvmAndAndroidMain)
+        }
+
+        val androidMain by getting {
+            dependsOn(jvmAndAndroidMain)
         }
 
         commonMain.dependencies {
@@ -66,6 +71,15 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.kermit)
             implementation(projects.shared)
+        }
+
+        androidMain.dependencies {
+            implementation(compose.preview)
+            implementation(libs.androidx.activity.compose)
+            implementation(libs.androidx.splashscreen)
+            implementation(libs.androidx.credentials)
+            implementation(libs.androidx.credentials.auth)
+            implementation(libs.google.identity.googleid)
         }
 
         desktopMain.dependencies {
@@ -119,6 +133,12 @@ android {
 
     dependencies {
         debugImplementation(compose.uiTooling)
+    }
+}
+
+kotlin {
+    compilerOptions {
+        freeCompilerArgs = listOf("-Xexpect-actual-classes")
     }
 }
 
