@@ -1,5 +1,7 @@
 package com.mxrsoon.volare.main
 
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.ime
@@ -68,7 +70,11 @@ fun MainScreen(
         NavHost(
             modifier = Modifier.fillMaxSize().imePadding(),
             navController = navController,
-            startDestination = HomeTabRoute
+            startDestination = HomeTabRoute,
+            enterTransition = { fadeIn() },
+            exitTransition = { fadeOut() },
+            popEnterTransition = { fadeIn() },
+            popExitTransition = { fadeOut() }
         ) {
             navigation<HomeTabRoute>(startDestination = HomeRoute) {
                 composable<HomeRoute> { HomeScreen(onSignOut = onSignOut) }

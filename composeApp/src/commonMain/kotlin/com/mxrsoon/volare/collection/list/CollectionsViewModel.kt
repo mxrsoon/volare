@@ -29,17 +29,22 @@ class CollectionsViewModel(
     /**
      * Gets the collections available to the user.
      */
-    private fun getCollections() {
+    private fun getCollections(fromRefresh: Boolean = false) {
         viewModelScope.launch {
-            uiState = uiState.copy(loading = true, entries = null, loadingError = false)
+            uiState = uiState.copy(
+                loading = !fromRefresh,
+                entries = if (fromRefresh) uiState.entries else null,
+                loadingError = false,
+                refreshing = fromRefresh
+            )
             
             try {
                 val response = repository.getAll()
                 uiState = uiState.copy(entries = response)
             } catch (error: Throwable) {
-                uiState = uiState.copy(loadingError = true)
+                uiState = uiState.copy(entries = null, loadingError = true)
             } finally {
-                uiState = uiState.copy(loading = false)
+                uiState = uiState.copy(loading = false, refreshing = false)
             }
         }
     }
@@ -103,5 +108,12 @@ class CollectionsViewModel(
                 uiState = uiState.copy(actionError = true)
             }
         }
+    }
+
+    /**
+     * Refreshes the list of collections.
+     */
+    fun refresh() {
+        getCollections(fromRefresh = true)
     }
 }

@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -36,6 +37,9 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -88,7 +92,8 @@ fun CollectionsScreen(
         onDismissCollectionCreationRequest = { viewModel.dismissCollectionCreation() },
         onNewCollectionNameChange = { viewModel.setNewCollectionName(it) },
         onCreateCollectionRequest = { viewModel.createCollection() },
-        onDeleteCollectionClick = { viewModel.deleteCollection(it) }
+        onDeleteCollectionClick = { viewModel.deleteCollection(it) },
+        onRefresh = { viewModel.refresh() }
     )
 }
 
@@ -102,7 +107,8 @@ private fun CollectionsScreen(
     onDismissCollectionCreationRequest: () -> Unit,
     onNewCollectionNameChange: (String) -> Unit,
     onCreateCollectionRequest: () -> Unit,
-    onDeleteCollectionClick: (Collection) -> Unit
+    onDeleteCollectionClick: (Collection) -> Unit,
+    onRefresh: () -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val gridState = rememberLazyStaggeredGridState()
@@ -126,34 +132,51 @@ private fun CollectionsScreen(
         }
     ) { innerPadding ->
         val contentPadding = innerPadding + 16.dp
+        val fabPadding = PaddingValues(bottom = 72.dp)
         val entries = uiState.entries.orEmpty()
+        val pullToRefreshState = rememberPullToRefreshState()
 
-        LazyVerticalStaggeredGrid(
-            modifier = Modifier
-                .nestedScroll(scrollBehavior.nestedScrollConnection)
-                .consumeWindowInsets(contentPadding)
-                .fillMaxSize(),
-            state = gridState,
-            columns = StaggeredGridCells.Adaptive(240.dp),
-            verticalItemSpacing = 8.dp,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = contentPadding,
-            content = {
-                items(
-                    items = entries,
-                    key = { entry -> entry.collection.id }
-                ) { entry ->
-                    CollectionCard(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight(),
-                        entry = entry,
-                        onClick = { onCollectionClick(entry.collection) },
-                        onDeleteClick = { onDeleteCollectionClick(entry.collection) }
-                    )
-                }
+        PullToRefreshBox(
+            isRefreshing = uiState.refreshing,
+            onRefresh = onRefresh,
+            state = pullToRefreshState,
+            indicator = {
+                Indicator(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .padding(innerPadding),
+                    isRefreshing = uiState.refreshing,
+                    state = pullToRefreshState
+                )
             }
-        )
+        ) {
+            LazyVerticalStaggeredGrid(
+                modifier = Modifier
+                    .nestedScroll(scrollBehavior.nestedScrollConnection)
+                    .consumeWindowInsets(contentPadding)
+                    .fillMaxSize(),
+                state = gridState,
+                columns = StaggeredGridCells.Adaptive(240.dp),
+                verticalItemSpacing = 8.dp,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = contentPadding + fabPadding,
+                content = {
+                    items(
+                        items = entries,
+                        key = { entry -> entry.collection.id }
+                    ) { entry ->
+                        CollectionCard(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight(),
+                            entry = entry,
+                            onClick = { onCollectionClick(entry.collection) },
+                            onDeleteClick = { onDeleteCollectionClick(entry.collection) }
+                        )
+                    }
+                }
+            )
+        }
     }
 
     if (uiState.actionError) {
@@ -350,7 +373,8 @@ private fun CollectionsScreenPreview() {
             onDismissCollectionCreationRequest = {},
             onNewCollectionNameChange = {},
             onCreateCollectionRequest = {},
-            onDeleteCollectionClick = {}
+            onDeleteCollectionClick = {},
+            onRefresh = {}
         )
     }
 }
