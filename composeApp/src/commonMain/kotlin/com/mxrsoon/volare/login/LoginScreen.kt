@@ -274,7 +274,8 @@ private fun LoginFormButtons(
                 SecondaryButton(
                     modifier = Modifier.fillMaxWidth(),
                     label = stringResource(Res.string.sign_in_with_google_label),
-                    onClick = onGoogleSignInRequest
+                    onClick = onGoogleSignInRequest,
+                    enabled = !loading
                 )
             }
 
