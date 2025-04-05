@@ -15,6 +15,8 @@ import com.mxrsoon.volare.common.network.clearAuthTokens
 import com.mxrsoon.volare.common.ui.theme.VolareTheme
 import com.mxrsoon.volare.login.LoginRoute
 import com.mxrsoon.volare.login.LoginScreen
+import com.mxrsoon.volare.login.options.LoginOptionsRoute
+import com.mxrsoon.volare.login.options.LoginOptionsScreen
 import com.mxrsoon.volare.main.MainRoute
 import com.mxrsoon.volare.main.MainScreen
 import com.mxrsoon.volare.register.RegisterRoute
@@ -35,16 +37,34 @@ fun App(
                 navController = navController,
                 startDestination = RootRoute
             ) {
-                navigation<RootRoute>(startDestination = LoginRoute()) {
+                navigation<RootRoute>(startDestination = LoginOptionsRoute) {
+                    composable<LoginOptionsRoute> { entry ->
+                        LoginOptionsScreen(
+                            enableGoogleSignIn = enableGoogleSignIn,
+                            googleAuthToken = googleAuthToken,
+                            onGoogleSignInRequest = onGoogleSignInRequest,
+                            onEmailSignInClick = {
+                                navController.navigate(LoginRoute())
+                            },
+                            onRegisterClick = {
+                                navController.navigate(RegisterRoute())
+                            },
+                            onSignIn = {
+                                navController.navigate(MainRoute) {
+                                    popUpTo<RootRoute> {
+                                        inclusive = false
+                                    }
+                                }
+                            }
+                        )
+                    }
+
                     composable<LoginRoute> { entry ->
                         val route = entry.toRoute<LoginRoute>()
 
                         LoginScreen(
                             presetEmail = route.email,
                             presetPassword = route.password,
-                            enableGoogleSignIn = enableGoogleSignIn,
-                            googleAuthToken = googleAuthToken,
-                            onGoogleSignInRequest = onGoogleSignInRequest,
                             onSignIn = {
                                 navController.navigate(MainRoute) {
                                     popUpTo<RootRoute> {
