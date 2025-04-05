@@ -55,6 +55,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mxrsoon.volare.common.datetime.format
+import com.mxrsoon.volare.common.ui.button.BackButton
 import com.mxrsoon.volare.common.ui.dialog.ErrorDialog
 import com.mxrsoon.volare.common.ui.padding.plus
 import com.mxrsoon.volare.common.ui.theme.VolareTheme
@@ -62,8 +63,6 @@ import com.mxrsoon.volare.item.Item
 import com.mxrsoon.volare.resources.Res
 import com.mxrsoon.volare.resources.add_20px
 import com.mxrsoon.volare.resources.add_item_label
-import com.mxrsoon.volare.resources.arrow_back_24px
-import com.mxrsoon.volare.resources.back_label
 import com.mxrsoon.volare.resources.cancel_label
 import com.mxrsoon.volare.resources.create_label
 import com.mxrsoon.volare.resources.created_at_format
@@ -133,12 +132,7 @@ private fun ItemsScreen(
                 title = { Text(text = collectionName) },
                 scrollBehavior = scrollBehavior,
                 navigationIcon = {
-                    IconButton(onClick = onBackRequest) {
-                        Icon(
-                            painter = painterResource(Res.drawable.arrow_back_24px),
-                            contentDescription = stringResource(Res.string.back_label)
-                        )
-                    }
+                    BackButton(onClick = onBackRequest)
                 }
             )
         },
