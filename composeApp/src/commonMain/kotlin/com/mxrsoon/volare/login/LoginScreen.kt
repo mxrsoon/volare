@@ -39,16 +39,16 @@ import com.mxrsoon.volare.common.ui.button.SecondaryButton
 import com.mxrsoon.volare.common.ui.dialog.ErrorDialog
 import com.mxrsoon.volare.common.ui.dialog.onEnterKeyDown
 import com.mxrsoon.volare.common.ui.theme.VolareTheme
-import com.mxrsoon.volare.composeapp.generated.resources.Res
-import com.mxrsoon.volare.composeapp.generated.resources.app_name
-import com.mxrsoon.volare.composeapp.generated.resources.create_account_label
-import com.mxrsoon.volare.composeapp.generated.resources.email_label
-import com.mxrsoon.volare.composeapp.generated.resources.login_error_message
-import com.mxrsoon.volare.composeapp.generated.resources.login_error_title
-import com.mxrsoon.volare.composeapp.generated.resources.password_label
-import com.mxrsoon.volare.composeapp.generated.resources.sign_in_label
-import com.mxrsoon.volare.composeapp.generated.resources.sign_in_with_google_label
-import com.mxrsoon.volare.composeapp.generated.resources.welcome_to_format
+import com.mxrsoon.volare.resources.Res
+import com.mxrsoon.volare.resources.app_name
+import com.mxrsoon.volare.resources.create_account_label
+import com.mxrsoon.volare.resources.email_label
+import com.mxrsoon.volare.resources.login_error_message
+import com.mxrsoon.volare.resources.login_error_title
+import com.mxrsoon.volare.resources.password_label
+import com.mxrsoon.volare.resources.sign_in_label
+import com.mxrsoon.volare.resources.sign_in_with_google_label
+import com.mxrsoon.volare.resources.welcome_to_format
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 

@@ -35,17 +35,17 @@ import com.mxrsoon.volare.auth.Credentials
 import com.mxrsoon.volare.common.ui.button.PrimaryButton
 import com.mxrsoon.volare.common.ui.button.SecondaryButton
 import com.mxrsoon.volare.common.ui.dialog.ErrorDialog
-import com.mxrsoon.volare.composeapp.generated.resources.Res
-import com.mxrsoon.volare.composeapp.generated.resources.create_account_label
-import com.mxrsoon.volare.composeapp.generated.resources.create_account_title
-import com.mxrsoon.volare.composeapp.generated.resources.email_label
-import com.mxrsoon.volare.composeapp.generated.resources.first_name_label
-import com.mxrsoon.volare.composeapp.generated.resources.last_name_label
-import com.mxrsoon.volare.composeapp.generated.resources.password_confirmation_label
-import com.mxrsoon.volare.composeapp.generated.resources.password_label
-import com.mxrsoon.volare.composeapp.generated.resources.register_error_message
-import com.mxrsoon.volare.composeapp.generated.resources.register_error_title
-import com.mxrsoon.volare.composeapp.generated.resources.use_existing_account_label
+import com.mxrsoon.volare.resources.Res
+import com.mxrsoon.volare.resources.create_account_label
+import com.mxrsoon.volare.resources.create_account_title
+import com.mxrsoon.volare.resources.email_label
+import com.mxrsoon.volare.resources.first_name_label
+import com.mxrsoon.volare.resources.last_name_label
+import com.mxrsoon.volare.resources.password_confirmation_label
+import com.mxrsoon.volare.resources.password_label
+import com.mxrsoon.volare.resources.register_error_message
+import com.mxrsoon.volare.resources.register_error_title
+import com.mxrsoon.volare.resources.use_existing_account_label
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

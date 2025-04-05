@@ -84,7 +84,6 @@ kotlin {
 
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
-            implementation(libs.kotlinx.coroutines.swing)
         }
     }
 }
@@ -130,10 +129,6 @@ android {
     buildFeatures {
         compose = true
     }
-
-    dependencies {
-        debugImplementation(compose.uiTooling)
-    }
 }
 
 kotlin {
@@ -142,15 +137,21 @@ kotlin {
     }
 }
 
-compose.desktop {
-    application {
-        mainClass = "${group}.MainKt"
+compose {
+    resources {
+        packageOfResClass = "$group.resources"
+    }
 
-        nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = name
-            packageVersion = version.toString()
-            jvmArgs("-Dapple.awt.application.appearance=system")
+    desktop {
+        application {
+            mainClass = "${group}.MainKt"
+
+            nativeDistributions {
+                targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+                packageName = name
+                packageVersion = version.toString()
+                jvmArgs("-Dapple.awt.application.appearance=system")
+            }
         }
     }
 }
