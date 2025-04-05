@@ -56,6 +56,9 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
  * Login screen.
  * @param presetEmail Email to pre-fill the email field.
  * @param presetPassword Password to pre-fill the password field.
+ * @param enableGoogleSignIn Whether Google sign in is enabled.
+ * @param googleAuthToken Google auth token.
+ * @param onGoogleSignInRequest Called when the user clicks the Google sign in button.
  * @param onRegisterClick Called when the user clicks the register button. Receives the currently entered credentials as
  * a parameter.
  * @param onSignIn Called when the user successfully logs in.

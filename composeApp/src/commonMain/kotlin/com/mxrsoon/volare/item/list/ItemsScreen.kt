@@ -74,9 +74,7 @@ import com.mxrsoon.volare.resources.loading_error_title
 import com.mxrsoon.volare.resources.more_vert_24px
 import com.mxrsoon.volare.resources.open_context_menu_label
 import kotlinx.datetime.Clock
-import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.minus
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -368,22 +366,6 @@ private fun ItemsScreenPreview() {
                 entries = listOf(
                     Item(
                         id = "1",
-                        name = "Apartamento",
-                        creatorId = "1",
-                        collectionId = "",
-                        createdAt = Clock.System.now().minus(1, DateTimeUnit.YEAR, TimeZone.currentSystemDefault()),
-                        url = null
-                    ),
-                    Item(
-                        id = "2",
-                        name = "Energia",
-                        creatorId = "1",
-                        collectionId = "",
-                        createdAt = Clock.System.now().minus(5, DateTimeUnit.MONTH, TimeZone.currentSystemDefault()),
-                        url = null
-                    ),
-                    Item(
-                        id = "3",
                         name = "Cartões",
                         creatorId = "1",
                         collectionId = "",

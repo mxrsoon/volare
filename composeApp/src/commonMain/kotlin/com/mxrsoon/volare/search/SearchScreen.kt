@@ -81,10 +81,21 @@ fun SearchScreen() {
 
 @Preview
 @Composable
-private fun SearchScreenPreview() {
+private fun SearchScreenDarkPreview() {
     VolareTheme(
         platformColorScheme = false,
         darkMode = true
+    ) {
+        SearchScreen()
+    }
+}
+
+@Preview
+@Composable
+private fun SearchScreenLightPreview() {
+    VolareTheme(
+        platformColorScheme = false,
+        darkMode = false
     ) {
         SearchScreen()
     }
