@@ -10,6 +10,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.mxrsoon.volare.common.ui.theme.VolareTheme
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun HomeScreen(
@@ -28,5 +30,27 @@ fun HomeScreen(
                 Text("Sign out")
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun HomeScreenDarkPreview() {
+    VolareTheme(
+        platformColorScheme = false,
+        darkMode = true
+    ) {
+        HomeScreen(onSignOut = {})
+    }
+}
+
+@Preview
+@Composable
+private fun HomeScreenLightPreview() {
+    VolareTheme(
+        platformColorScheme = false,
+        darkMode = false
+    ) {
+        HomeScreen(onSignOut = {})
     }
 }

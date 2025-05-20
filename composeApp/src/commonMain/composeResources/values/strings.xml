@@ -8,6 +8,7 @@
     <string name="email_label">E-mail</string>
     <string name="password_label">Senha</string>
     <string name="create_account_label">Criar conta</string>
+    <string name="sign_in_with_email_label">Entrar com e-mail</string>
     <string name="sign_in_with_google_label">Entrar com o Google</string>
     <string name="sign_in_label">Entrar</string>
     <string name="home_label">Início</string>

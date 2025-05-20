@@ -2,8 +2,8 @@ package com.mxrsoon.volare.common.ui.dialog
 
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import com.mxrsoon.volare.composeapp.generated.resources.Res
-import com.mxrsoon.volare.composeapp.generated.resources.error_24px
+import com.mxrsoon.volare.resources.Res
+import com.mxrsoon.volare.resources.error_24px
 import org.jetbrains.compose.resources.vectorResource
 
 @Composable

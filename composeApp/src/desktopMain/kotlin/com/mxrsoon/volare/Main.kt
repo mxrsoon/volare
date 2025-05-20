@@ -2,8 +2,8 @@ package com.mxrsoon.volare
 
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import com.mxrsoon.volare.composeapp.generated.resources.Res
-import com.mxrsoon.volare.composeapp.generated.resources.app_name
+import com.mxrsoon.volare.resources.Res
+import com.mxrsoon.volare.resources.app_name
 import org.jetbrains.compose.resources.stringResource
 
 fun main() = application {

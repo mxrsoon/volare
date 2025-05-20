@@ -5,10 +5,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import com.mxrsoon.volare.composeapp.generated.resources.Res
-import com.mxrsoon.volare.composeapp.generated.resources.cancel_label
-import com.mxrsoon.volare.composeapp.generated.resources.ok_label
-import com.mxrsoon.volare.composeapp.generated.resources.warning_24px
+import com.mxrsoon.volare.resources.Res
+import com.mxrsoon.volare.resources.cancel_label
+import com.mxrsoon.volare.resources.ok_label
+import com.mxrsoon.volare.resources.warning_24px
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 

@@ -17,8 +17,6 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
@@ -53,31 +51,28 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mxrsoon.volare.common.datetime.format
+import com.mxrsoon.volare.common.ui.button.BackButton
 import com.mxrsoon.volare.common.ui.dialog.ErrorDialog
 import com.mxrsoon.volare.common.ui.padding.plus
 import com.mxrsoon.volare.common.ui.theme.VolareTheme
-import com.mxrsoon.volare.composeapp.generated.resources.Res
-import com.mxrsoon.volare.composeapp.generated.resources.add_20px
-import com.mxrsoon.volare.composeapp.generated.resources.add_item_label
-import com.mxrsoon.volare.composeapp.generated.resources.arrow_back_24px
-import com.mxrsoon.volare.composeapp.generated.resources.back_label
-import com.mxrsoon.volare.composeapp.generated.resources.cancel_label
-import com.mxrsoon.volare.composeapp.generated.resources.create_label
-import com.mxrsoon.volare.composeapp.generated.resources.created_at_format
-import com.mxrsoon.volare.composeapp.generated.resources.delete_24px
-import com.mxrsoon.volare.composeapp.generated.resources.delete_label
-import com.mxrsoon.volare.composeapp.generated.resources.item_name
-import com.mxrsoon.volare.composeapp.generated.resources.loading_error_message
-import com.mxrsoon.volare.composeapp.generated.resources.loading_error_title
-import com.mxrsoon.volare.composeapp.generated.resources.more_vert_24px
-import com.mxrsoon.volare.composeapp.generated.resources.open_context_menu_label
 import com.mxrsoon.volare.item.Item
+import com.mxrsoon.volare.resources.Res
+import com.mxrsoon.volare.resources.add_20px
+import com.mxrsoon.volare.resources.add_24px
+import com.mxrsoon.volare.resources.add_item_label
+import com.mxrsoon.volare.resources.cancel_label
+import com.mxrsoon.volare.resources.create_label
+import com.mxrsoon.volare.resources.created_at_format
+import com.mxrsoon.volare.resources.delete_24px
+import com.mxrsoon.volare.resources.delete_label
+import com.mxrsoon.volare.resources.item_name
+import com.mxrsoon.volare.resources.loading_error_message
+import com.mxrsoon.volare.resources.loading_error_title
+import com.mxrsoon.volare.resources.more_vert_24px
+import com.mxrsoon.volare.resources.open_context_menu_label
 import kotlinx.datetime.Clock
-import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.minus
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -133,19 +128,14 @@ private fun ItemsScreen(
                 title = { Text(text = collectionName) },
                 scrollBehavior = scrollBehavior,
                 navigationIcon = {
-                    IconButton(onClick = onBackRequest) {
-                        Icon(
-                            painter = painterResource(Res.drawable.arrow_back_24px),
-                            contentDescription = stringResource(Res.string.back_label)
-                        )
-                    }
+                    BackButton(onClick = onBackRequest)
                 }
             )
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 text = { Text(stringResource(Res.string.add_item_label)) },
-                icon = { Icon(Icons.Outlined.Add, null) },
+                icon = { Icon(painterResource(Res.drawable.add_24px), null) },
                 expanded = gridState.firstVisibleItemIndex == 0 || gridState.lastScrolledBackward,
                 onClick = onCreateItemClick
             )
@@ -374,22 +364,6 @@ private fun ItemsScreenPreview() {
                 entries = listOf(
                     Item(
                         id = "1",
-                        name = "Apartamento",
-                        creatorId = "1",
-                        collectionId = "",
-                        createdAt = Clock.System.now().minus(1, DateTimeUnit.YEAR, TimeZone.currentSystemDefault()),
-                        url = null
-                    ),
-                    Item(
-                        id = "2",
-                        name = "Energia",
-                        creatorId = "1",
-                        collectionId = "",
-                        createdAt = Clock.System.now().minus(5, DateTimeUnit.MONTH, TimeZone.currentSystemDefault()),
-                        url = null
-                    ),
-                    Item(
-                        id = "3",
                         name = "Cartões",
                         creatorId = "1",
                         collectionId = "",

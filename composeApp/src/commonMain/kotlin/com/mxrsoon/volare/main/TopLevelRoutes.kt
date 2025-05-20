@@ -1,12 +1,12 @@
 package com.mxrsoon.volare.main
 
-import com.mxrsoon.volare.composeapp.generated.resources.Res
-import com.mxrsoon.volare.composeapp.generated.resources.collections_label
-import com.mxrsoon.volare.composeapp.generated.resources.home_24px
-import com.mxrsoon.volare.composeapp.generated.resources.home_label
-import com.mxrsoon.volare.composeapp.generated.resources.search_24px
-import com.mxrsoon.volare.composeapp.generated.resources.search_label
-import com.mxrsoon.volare.composeapp.generated.resources.stacks_24px
+import com.mxrsoon.volare.resources.Res
+import com.mxrsoon.volare.resources.collections_label
+import com.mxrsoon.volare.resources.home_24px
+import com.mxrsoon.volare.resources.home_label
+import com.mxrsoon.volare.resources.search_24px
+import com.mxrsoon.volare.resources.search_label
+import com.mxrsoon.volare.resources.stacks_24px
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
 

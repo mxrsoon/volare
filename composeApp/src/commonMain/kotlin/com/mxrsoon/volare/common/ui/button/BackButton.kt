@@ -4,9 +4,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.mxrsoon.volare.composeapp.generated.resources.Res
-import com.mxrsoon.volare.composeapp.generated.resources.arrow_back_24px
-import org.jetbrains.compose.resources.vectorResource
+import com.mxrsoon.volare.resources.Res
+import com.mxrsoon.volare.resources.arrow_back_24px
+import com.mxrsoon.volare.resources.back_label
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun BackButton(
@@ -17,6 +19,9 @@ fun BackButton(
         modifier = modifier,
         onClick = onClick
     ) {
-        Icon(vectorResource(Res.drawable.arrow_back_24px), null)
+        Icon(
+            painter = painterResource(Res.drawable.arrow_back_24px),
+            contentDescription = stringResource(Res.string.back_label)
+        )
     }
 }

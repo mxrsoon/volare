@@ -35,18 +35,20 @@ import com.mxrsoon.volare.auth.Credentials
 import com.mxrsoon.volare.common.ui.button.PrimaryButton
 import com.mxrsoon.volare.common.ui.button.SecondaryButton
 import com.mxrsoon.volare.common.ui.dialog.ErrorDialog
-import com.mxrsoon.volare.composeapp.generated.resources.Res
-import com.mxrsoon.volare.composeapp.generated.resources.create_account_label
-import com.mxrsoon.volare.composeapp.generated.resources.create_account_title
-import com.mxrsoon.volare.composeapp.generated.resources.email_label
-import com.mxrsoon.volare.composeapp.generated.resources.first_name_label
-import com.mxrsoon.volare.composeapp.generated.resources.last_name_label
-import com.mxrsoon.volare.composeapp.generated.resources.password_confirmation_label
-import com.mxrsoon.volare.composeapp.generated.resources.password_label
-import com.mxrsoon.volare.composeapp.generated.resources.register_error_message
-import com.mxrsoon.volare.composeapp.generated.resources.register_error_title
-import com.mxrsoon.volare.composeapp.generated.resources.use_existing_account_label
+import com.mxrsoon.volare.common.ui.theme.VolareTheme
+import com.mxrsoon.volare.resources.Res
+import com.mxrsoon.volare.resources.create_account_label
+import com.mxrsoon.volare.resources.create_account_title
+import com.mxrsoon.volare.resources.email_label
+import com.mxrsoon.volare.resources.first_name_label
+import com.mxrsoon.volare.resources.last_name_label
+import com.mxrsoon.volare.resources.password_confirmation_label
+import com.mxrsoon.volare.resources.password_label
+import com.mxrsoon.volare.resources.register_error_message
+import com.mxrsoon.volare.resources.register_error_title
+import com.mxrsoon.volare.resources.use_existing_account_label
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun RegisterScreen(
@@ -67,6 +69,31 @@ fun RegisterScreen(
         }
     }
 
+    RegisterScreen(
+        uiState = viewModel.uiState,
+        onFirstNameChange = { viewModel.setFirstName(it) },
+        onLastNameChange = { viewModel.setLastName(it) },
+        onEmailChange = { viewModel.setEmail(it) },
+        onPasswordChange = { viewModel.setPassword(it) },
+        onPasswordConfirmationChange = { viewModel.setPasswordConfirmation(it) },
+        onRegisterClick = { viewModel.register() },
+        onLoginClick = onLoginClick,
+        onDismissErrorRequest = { viewModel.dismissError() }
+    )
+}
+
+@Composable
+private fun RegisterScreen(
+    uiState: RegisterUiState,
+    onFirstNameChange: (String) -> Unit,
+    onLastNameChange: (String) -> Unit,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onPasswordConfirmationChange: (String) -> Unit,
+    onRegisterClick: () -> Unit,
+    onLoginClick: () -> Unit,
+    onDismissErrorRequest: () -> Unit
+) {
     Scaffold(Modifier.imePadding()) { paddingValues ->
         val scrollState = rememberScrollState()
 
@@ -100,18 +127,18 @@ fun RegisterScreen(
 
                 RegisterFormFields(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 48.dp),
-                    firstName = viewModel.uiState.firstName,
-                    lastName = viewModel.uiState.lastName,
-                    email = viewModel.uiState.email,
-                    password = viewModel.uiState.password,
-                    passwordConfirmation = viewModel.uiState.passwordConfirmation,
-                    onFirstNameChange = { viewModel.setFirstName(it) },
-                    onLastNameChange = { viewModel.setLastName(it) },
-                    onEmailChange = { viewModel.setEmail(it) },
-                    onPasswordChange = { viewModel.setPassword(it) },
-                    onPasswordConfirmationChange = { viewModel.setPasswordConfirmation(it) },
-                    passwordMismatch = viewModel.uiState.passwordMismatch,
-                    enabled = !viewModel.uiState.loading
+                    firstName = uiState.firstName,
+                    lastName = uiState.lastName,
+                    email = uiState.email,
+                    password = uiState.password,
+                    passwordConfirmation = uiState.passwordConfirmation,
+                    onFirstNameChange = onFirstNameChange,
+                    onLastNameChange = onLastNameChange,
+                    onEmailChange = onEmailChange,
+                    onPasswordChange = onPasswordChange,
+                    onPasswordConfirmationChange = onPasswordConfirmationChange,
+                    passwordMismatch = uiState.passwordMismatch,
+                    enabled = !uiState.loading
                 )
 
                 if (compact) Spacer(Modifier.weight(1f))
@@ -121,16 +148,16 @@ fun RegisterScreen(
                         .fillMaxWidth()
                         .padding(bottom = 24.dp),
                     compact = compact,
-                    loading = viewModel.uiState.loading,
-                    onRegisterClick = { viewModel.register() },
+                    loading = uiState.loading,
+                    onRegisterClick = onRegisterClick,
                     onLoginClick = onLoginClick
                 )
             }
         }
     }
 
-    if (viewModel.uiState.showError) {
-        RegisterErrorDialog(onDismissRequest = { viewModel.dismissError() })
+    if (uiState.showError) {
+        RegisterErrorDialog(onDismissRequest = onDismissErrorRequest)
     }
 }
 
@@ -261,5 +288,47 @@ private fun RegisterFormButtons(
                 loading = loading
             )
         }
+    }
+}
+
+@Preview
+@Composable
+private fun RegisterScreenDarkPreview() {
+    VolareTheme(
+        platformColorScheme = false,
+        darkMode = true
+    ) {
+        RegisterScreen(
+            uiState = RegisterUiState(),
+            onFirstNameChange = {},
+            onLastNameChange = {},
+            onEmailChange = {},
+            onPasswordChange = {},
+            onPasswordConfirmationChange = {},
+            onRegisterClick = {},
+            onLoginClick = {},
+            onDismissErrorRequest = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun RegisterScreenLightPreview() {
+    VolareTheme(
+        platformColorScheme = false,
+        darkMode = false
+    ) {
+        RegisterScreen(
+            uiState = RegisterUiState(),
+            onFirstNameChange = {},
+            onLastNameChange = {},
+            onEmailChange = {},
+            onPasswordChange = {},
+            onPasswordConfirmationChange = {},
+            onRegisterClick = {},
+            onLoginClick = {},
+            onDismissErrorRequest = {}
+        )
     }
 }

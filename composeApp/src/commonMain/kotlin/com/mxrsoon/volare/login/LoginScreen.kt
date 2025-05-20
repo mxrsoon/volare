@@ -22,8 +22,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
@@ -36,19 +39,15 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mxrsoon.volare.auth.Credentials
 import com.mxrsoon.volare.common.ui.button.PrimaryButton
 import com.mxrsoon.volare.common.ui.button.SecondaryButton
-import com.mxrsoon.volare.common.ui.dialog.ErrorDialog
 import com.mxrsoon.volare.common.ui.dialog.onEnterKeyDown
 import com.mxrsoon.volare.common.ui.theme.VolareTheme
-import com.mxrsoon.volare.composeapp.generated.resources.Res
-import com.mxrsoon.volare.composeapp.generated.resources.app_name
-import com.mxrsoon.volare.composeapp.generated.resources.create_account_label
-import com.mxrsoon.volare.composeapp.generated.resources.email_label
-import com.mxrsoon.volare.composeapp.generated.resources.login_error_message
-import com.mxrsoon.volare.composeapp.generated.resources.login_error_title
-import com.mxrsoon.volare.composeapp.generated.resources.password_label
-import com.mxrsoon.volare.composeapp.generated.resources.sign_in_label
-import com.mxrsoon.volare.composeapp.generated.resources.sign_in_with_google_label
-import com.mxrsoon.volare.composeapp.generated.resources.welcome_to_format
+import com.mxrsoon.volare.resources.Res
+import com.mxrsoon.volare.resources.app_name
+import com.mxrsoon.volare.resources.create_account_label
+import com.mxrsoon.volare.resources.email_label
+import com.mxrsoon.volare.resources.password_label
+import com.mxrsoon.volare.resources.sign_in_label
+import com.mxrsoon.volare.resources.welcome_to_format
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -65,9 +64,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun LoginScreen(
     presetEmail: String? = null,
     presetPassword: String? = null,
-    enableGoogleSignIn: Boolean,
-    googleAuthToken: String?,
-    onGoogleSignInRequest: () -> Unit,
     onRegisterClick: (Credentials) -> Unit,
     onSignIn: () -> Unit,
     viewModel: LoginViewModel = viewModel { LoginViewModel() }
@@ -77,14 +73,8 @@ fun LoginScreen(
         presetPassword?.let { viewModel.setPassword(it) }
     }
 
-    LaunchedEffect(googleAuthToken) {
-        googleAuthToken?.let { viewModel.signInWithGoogle(it) }
-    }
-
     LoginScreen(
         uiState = viewModel.uiState,
-        enableGoogleSignIn = enableGoogleSignIn,
-        onGoogleSignInRequest = onGoogleSignInRequest,
         onEmailChange = { viewModel.setEmail(it) },
         onPasswordChange = { viewModel.setPassword(it) },
         onRegisterClick = onRegisterClick,
@@ -100,8 +90,6 @@ fun LoginScreen(
 @Composable
 private fun LoginScreen(
     uiState: LoginUiState,
-    enableGoogleSignIn: Boolean,
-    onGoogleSignInRequest: () -> Unit,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onRegisterClick: (Credentials) -> Unit,
@@ -109,6 +97,12 @@ private fun LoginScreen(
     onSignIn: () -> Unit,
     onDismissErrorRequest: () -> Unit
 ) {
+    val emailFocusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(Unit) {
+        emailFocusRequester.requestFocus()
+    }
+
     LaunchedEffect(uiState.loggedIn) {
         if (uiState.loggedIn) {
             onSignIn()
@@ -150,7 +144,8 @@ private fun LoginScreen(
                     onEmailChange = onEmailChange,
                     onPasswordChange = onPasswordChange,
                     onSubmit = onSignInRequest,
-                    enabled = !uiState.loading
+                    enabled = !uiState.loading,
+                    emailFocusRequester = emailFocusRequester
                 )
 
                 if (compact) Spacer(Modifier.weight(1f))
@@ -161,8 +156,6 @@ private fun LoginScreen(
                         .padding(bottom = 24.dp),
                     compact = compact,
                     loading = uiState.loading,
-                    enableGoogleSignIn = enableGoogleSignIn,
-                    onGoogleSignInRequest = onGoogleSignInRequest,
                     onLoginClick = onSignInRequest,
                     onRegisterClick = { onRegisterClick(uiState.typedCredentials) }
                 )
@@ -173,15 +166,6 @@ private fun LoginScreen(
     if (uiState.showError) {
         LoginErrorDialog(onDismissRequest = onDismissErrorRequest)
     }
-}
-
-@Composable
-private fun LoginErrorDialog(onDismissRequest: () -> Unit) {
-    ErrorDialog(
-        title = stringResource(Res.string.login_error_title),
-        message = stringResource(Res.string.login_error_message),
-        onDismissRequest = onDismissRequest
-    )
 }
 
 @Composable
@@ -213,13 +197,15 @@ private fun LoginFormFields(
     onPasswordChange: (String) -> Unit,
     onSubmit: () -> Unit,
     modifier: Modifier = Modifier,
-    enabled: Boolean
+    enabled: Boolean = true,
+    emailFocusRequester: FocusRequester = FocusRequester()
 ) {
     Column(modifier) {
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .onEnterKeyDown(onSubmit),
+                .onEnterKeyDown(onSubmit)
+                .focusRequester(emailFocusRequester),
             value = email,
             onValueChange = onEmailChange,
             enabled = enabled,
@@ -252,8 +238,6 @@ private fun LoginFormFields(
 private fun LoginFormButtons(
     compact: Boolean,
     loading: Boolean,
-    enableGoogleSignIn: Boolean,
-    onGoogleSignInRequest: () -> Unit,
     onLoginClick: () -> Unit,
     onRegisterClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -269,15 +253,6 @@ private fun LoginFormButtons(
                 onClick = onRegisterClick,
                 enabled = !loading
             )
-
-            if (enableGoogleSignIn) {
-                SecondaryButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    label = stringResource(Res.string.sign_in_with_google_label),
-                    onClick = onGoogleSignInRequest,
-                    enabled = !loading
-                )
-            }
 
             PrimaryButton(
                 modifier = Modifier.fillMaxWidth(),
@@ -319,8 +294,6 @@ private fun LoginScreenDarkPreview() {
     ) {
         LoginScreen(
             uiState = LoginUiState(),
-            enableGoogleSignIn = false,
-            onGoogleSignInRequest = {},
             onEmailChange = {},
             onPasswordChange = {},
             onRegisterClick = {},
@@ -340,8 +313,6 @@ private fun LoginScreenLightPreview() {
     ) {
         LoginScreen(
             uiState = LoginUiState(),
-            enableGoogleSignIn = false,
-            onGoogleSignInRequest = {},
             onEmailChange = {},
             onPasswordChange = {},
             onRegisterClick = {},

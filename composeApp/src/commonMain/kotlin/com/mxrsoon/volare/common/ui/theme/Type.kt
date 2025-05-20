@@ -4,16 +4,16 @@ import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import com.mxrsoon.volare.composeapp.generated.resources.NotoSans_Black
-import com.mxrsoon.volare.composeapp.generated.resources.NotoSans_Bold
-import com.mxrsoon.volare.composeapp.generated.resources.NotoSans_ExtraBold
-import com.mxrsoon.volare.composeapp.generated.resources.NotoSans_ExtraLight
-import com.mxrsoon.volare.composeapp.generated.resources.NotoSans_Light
-import com.mxrsoon.volare.composeapp.generated.resources.NotoSans_Medium
-import com.mxrsoon.volare.composeapp.generated.resources.NotoSans_Regular
-import com.mxrsoon.volare.composeapp.generated.resources.NotoSans_SemiBold
-import com.mxrsoon.volare.composeapp.generated.resources.NotoSans_Thin
-import com.mxrsoon.volare.composeapp.generated.resources.Res
+import com.mxrsoon.volare.resources.NotoSans_Black
+import com.mxrsoon.volare.resources.NotoSans_Bold
+import com.mxrsoon.volare.resources.NotoSans_ExtraBold
+import com.mxrsoon.volare.resources.NotoSans_ExtraLight
+import com.mxrsoon.volare.resources.NotoSans_Light
+import com.mxrsoon.volare.resources.NotoSans_Medium
+import com.mxrsoon.volare.resources.NotoSans_Regular
+import com.mxrsoon.volare.resources.NotoSans_SemiBold
+import com.mxrsoon.volare.resources.NotoSans_Thin
+import com.mxrsoon.volare.resources.Res
 import org.jetbrains.compose.resources.Font
 
 private val baseline = Typography()
