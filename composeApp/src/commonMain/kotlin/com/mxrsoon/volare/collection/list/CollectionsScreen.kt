@@ -17,8 +17,6 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
@@ -53,7 +51,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mxrsoon.volare.collection.Collection
 import com.mxrsoon.volare.collection.CollectionListEntry
 import com.mxrsoon.volare.common.ui.dialog.ErrorDialog
@@ -61,6 +58,7 @@ import com.mxrsoon.volare.common.ui.padding.plus
 import com.mxrsoon.volare.common.ui.theme.VolareTheme
 import com.mxrsoon.volare.resources.Res
 import com.mxrsoon.volare.resources.add_20px
+import com.mxrsoon.volare.resources.add_24px
 import com.mxrsoon.volare.resources.cancel_label
 import com.mxrsoon.volare.resources.collection_name
 import com.mxrsoon.volare.resources.collections_label
@@ -125,7 +123,7 @@ private fun CollectionsScreen(
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 text = { Text(stringResource(Res.string.create_collection_label)) },
-                icon = { Icon(Icons.Outlined.Add, null) },
+                icon = { Icon(painterResource(Res.drawable.add_24px), null) },
                 expanded = gridState.firstVisibleItemIndex == 0 || gridState.lastScrolledBackward,
                 onClick = onCreateCollectionClick
             )

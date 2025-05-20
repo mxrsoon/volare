@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -31,7 +29,9 @@ import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.unit.dp
 import com.mxrsoon.volare.common.ui.theme.VolareTheme
 import com.mxrsoon.volare.resources.Res
+import com.mxrsoon.volare.resources.search_24px
 import com.mxrsoon.volare.resources.search_label
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -70,7 +70,7 @@ fun SearchScreen() {
                     expanded = expanded,
                     onExpandedChange = { expanded = it },
                     placeholder = { Text(stringResource(Res.string.search_label)) },
-                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) }
+                    leadingIcon = { Icon(painterResource(Res.drawable.search_24px), contentDescription = null) }
                 )
             },
             expanded = expanded,
