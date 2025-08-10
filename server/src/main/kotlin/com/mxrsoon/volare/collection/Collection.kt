@@ -1,10 +1,12 @@
 package com.mxrsoon.volare.collection
 
+import kotlin.time.ExperimentalTime
 import org.jetbrains.exposed.sql.ResultRow
 
 /**
  * Converts this result row to a [Collection].
  */
+@OptIn(ExperimentalTime::class)
 fun ResultRow.toCollection() = Collection(
     id = this[Collections.id].toString(),
     name = this[Collections.name],

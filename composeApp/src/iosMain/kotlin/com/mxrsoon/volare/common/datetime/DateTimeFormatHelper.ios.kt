@@ -1,5 +1,6 @@
 package com.mxrsoon.volare.common.datetime
 
+import kotlin.time.ExperimentalTime
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
@@ -17,6 +18,7 @@ actual object DateTimeFormatHelper {
     /**
      * Format the date and time in a human-readable format, using the preferred format for the user's locale.
      */
+    @OptIn(ExperimentalTime::class)
     actual fun format(dateTime: LocalDateTime): String {
         val platformDate = dateTime.toInstant(TimeZone.currentSystemDefault()).toNSDate()
         val formatter = NSDateFormatter()

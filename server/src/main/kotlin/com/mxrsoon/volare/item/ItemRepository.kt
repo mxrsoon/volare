@@ -2,6 +2,7 @@ package com.mxrsoon.volare.item
 
 import com.mxrsoon.volare.common.database.dbQuery
 import java.util.UUID
+import kotlin.time.ExperimentalTime
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
@@ -24,6 +25,7 @@ class ItemRepository {
     /**
      * Creates a new item in the database.
      */
+    @OptIn(ExperimentalTime::class)
     suspend fun create(item: Item): Item = dbQuery {
         val result = Items.insert {
             it[name] = item.name

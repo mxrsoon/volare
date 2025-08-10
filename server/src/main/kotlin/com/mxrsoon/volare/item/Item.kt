@@ -1,10 +1,12 @@
 package com.mxrsoon.volare.item
 
+import kotlin.time.ExperimentalTime
 import org.jetbrains.exposed.sql.ResultRow
 
 /**
  * Converts this result row to an [Item].
  */
+@OptIn(ExperimentalTime::class)
 fun ResultRow.toItem(): Item = Item(
     id = this[Items.id].toString(),
     name = this[Items.name],

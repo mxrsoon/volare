@@ -2,7 +2,8 @@ package com.mxrsoon.volare.item
 
 import com.mxrsoon.volare.collection.CollectionRepository
 import io.ktor.server.plugins.NotFoundException
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 /**
  * Service for managing items.
@@ -40,6 +41,7 @@ class ItemService(
     /**
      * Creates a new item.
      */
+    @OptIn(ExperimentalTime::class)
     suspend fun create(request: CreateItemRequest, loggedUserId: String): Item {
         if (!canAccessCollection(request.collectionId, loggedUserId)) {
             throw NotFoundException("Collection not found")

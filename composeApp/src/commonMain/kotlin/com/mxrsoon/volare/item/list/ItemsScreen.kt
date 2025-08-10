@@ -51,6 +51,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mxrsoon.volare.common.datetime.format
 import com.mxrsoon.volare.common.ui.button.BackButton
 import com.mxrsoon.volare.common.ui.dialog.ErrorDialog
@@ -71,7 +72,8 @@ import com.mxrsoon.volare.resources.loading_error_message
 import com.mxrsoon.volare.resources.loading_error_title
 import com.mxrsoon.volare.resources.more_vert_24px
 import com.mxrsoon.volare.resources.open_context_menu_label
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.painterResource
@@ -207,6 +209,7 @@ private fun ItemsScreen(
     }
 }
 
+@OptIn(ExperimentalTime::class)
 @Composable
 private fun ItemCard(
     entry: Item,
@@ -350,6 +353,7 @@ private fun CreateItemSheetContents(
     }
 }
 
+@OptIn(ExperimentalTime::class)
 @Preview
 @Composable
 private fun ItemsScreenPreview() {
@@ -407,6 +411,7 @@ private fun CreateItemSheetContentsPreview() {
     }
 }
 
+@OptIn(ExperimentalTime::class)
 @Preview
 @Composable
 private fun ItemListItemPreview() {

@@ -2,7 +2,8 @@ package com.mxrsoon.volare.collection
 
 import com.mxrsoon.volare.item.ItemRepository
 import io.ktor.server.plugins.NotFoundException
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 /**
  * Service for managing collections.
@@ -40,6 +41,7 @@ class CollectionService(
     /**
      * Creates a new collection.
      */
+    @OptIn(ExperimentalTime::class)
     suspend fun create(request: CreateCollectionRequest, loggedUserId: String): Collection =
         repository.create(
             Collection(

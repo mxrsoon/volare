@@ -2,6 +2,7 @@ package com.mxrsoon.volare.collection
 
 import com.mxrsoon.volare.common.database.dbQuery
 import java.util.UUID
+import kotlin.time.ExperimentalTime
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
@@ -24,6 +25,7 @@ class CollectionRepository {
     /**
      * Creates a new collection in the database.
      */
+    @OptIn(ExperimentalTime::class)
     suspend fun create(collection: Collection): Collection = dbQuery {
         val result = Collections.insert {
             it[name] = collection.name

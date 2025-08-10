@@ -17,12 +17,13 @@ import com.mxrsoon.volare.user.UserReference
 import com.mxrsoon.volare.user.UserRepository
 import com.mxrsoon.volare.user.toReference
 import java.util.Collections
+import kotlin.time.Clock
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
+import kotlin.time.toJavaInstant
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
-import kotlinx.datetime.toJavaInstant
 import org.mindrot.jbcrypt.BCrypt
 
 class AuthService(
@@ -118,6 +119,7 @@ class AuthService(
         return decodedJwt.takeIf { it.audience.contains(jwtParams.audience) }
     }
 
+    @OptIn(ExperimentalTime::class)
     private suspend fun generateTokenPair(userId: String): TokenPair {
         val accessTokenExpiration = Clock.System.now() + ACCESS_TOKEN_LIFETIME.milliseconds
         val accessToken = generateJwt(userId, accessTokenExpiration)
@@ -134,7 +136,7 @@ class AuthService(
         return TokenPair(accessToken, refreshToken)
     }
 
-    @OptIn(ExperimentalUuidApi::class)
+    @OptIn(ExperimentalUuidApi::class, ExperimentalTime::class)
     private fun generateJwt(userId: String, expiresAt: Instant?): String =
         JWT.create()
             .withAudience(jwtParams.audience)
