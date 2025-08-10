@@ -1,8 +1,7 @@
 package com.mxrsoon.volare.plugins
 
 import io.ktor.server.application.Application
-import kotlin.uuid.ExperimentalUuidApi
-import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.v1.jdbc.Database
 
 /**
  * Configures the database connection.

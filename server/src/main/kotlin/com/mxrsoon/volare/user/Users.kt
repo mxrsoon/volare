@@ -1,6 +1,6 @@
 package com.mxrsoon.volare.user
 
-import org.jetbrains.exposed.dao.id.UUIDTable
+import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
 
 /**
  * Users database table.

@@ -1,8 +1,8 @@
 package com.mxrsoon.volare.auth.refresh
 
 import com.mxrsoon.volare.user.Users
-import org.jetbrains.exposed.sql.ReferenceOption
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.v1.core.ReferenceOption
+import org.jetbrains.exposed.v1.core.Table
 
 /**
  * Refresh tokens database table.

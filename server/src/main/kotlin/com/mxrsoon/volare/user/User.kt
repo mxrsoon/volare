@@ -1,6 +1,6 @@
 package com.mxrsoon.volare.user
 
-import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.v1.core.ResultRow
 
 /**
  * User model with all fields. Should not be used in API responses, as it contains sensitive data.

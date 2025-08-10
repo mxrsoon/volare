@@ -1,7 +1,7 @@
 package com.mxrsoon.volare.auth.refresh
 
 import kotlinx.serialization.Serializable
-import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.v1.core.ResultRow
 
 @Serializable
 data class RefreshToken(

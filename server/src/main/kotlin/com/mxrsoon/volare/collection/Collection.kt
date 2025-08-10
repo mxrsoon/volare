@@ -1,7 +1,7 @@
 package com.mxrsoon.volare.collection
 
 import kotlin.time.ExperimentalTime
-import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.v1.core.ResultRow
 
 /**
  * Converts this result row to a [Collection].
