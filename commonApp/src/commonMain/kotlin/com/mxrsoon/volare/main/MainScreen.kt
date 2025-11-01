@@ -46,7 +46,7 @@ fun MainScreen(
     val isImeVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
 
     NavigationSuiteScaffold(
-        layoutType = if (isImeVisible) NavigationSuiteType.None else NavigationSuiteScaffoldDefaults.calculateFromAdaptiveInfo(currentWindowAdaptiveInfo()),
+        layoutType = NavigationSuiteType.None,
         navigationSuiteItems = {
             TopLevelRoutes.entries.forEach { route ->
                 item(
@@ -70,7 +70,7 @@ fun MainScreen(
         NavHost(
             modifier = Modifier.fillMaxSize().imePadding(),
             navController = navController,
-            startDestination = HomeTabRoute,
+            startDestination = CollectionsTabRoute,
             enterTransition = { fadeIn() },
             exitTransition = { fadeOut() },
             popEnterTransition = { fadeIn() },

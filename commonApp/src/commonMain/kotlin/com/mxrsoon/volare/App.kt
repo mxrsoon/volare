@@ -30,7 +30,7 @@ fun App(
     onGoogleSignOutRequest: () -> Unit = {}
 ) {
     VolareTheme {
-        Box(Modifier.background(MaterialTheme.colorScheme.background).fillMaxSize()) {
+        Box(Modifier.background(MaterialTheme.colorScheme.surfaceContainer).fillMaxSize()) {
             val navController = rememberNavController()
 
             NavHost(
