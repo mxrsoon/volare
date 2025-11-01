@@ -302,7 +302,7 @@ private fun CreateCollectionSheetContents(
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
-    
+
     Column(modifier) {
         OutlinedTextField(
             modifier = Modifier
@@ -366,6 +366,32 @@ private fun CollectionsScreenPreview() {
                         itemCount = 5
                     )
                 ),
+                showCollectionCreation = false
+            ),
+            onCollectionClick = {},
+            onCreateCollectionClick = {},
+            onDismissErrorRequest = {},
+            onDismissCollectionCreationRequest = {},
+            onNewCollectionNameChange = {},
+            onCreateCollectionRequest = {},
+            onDeleteCollectionClick = {},
+            onRefresh = {}
+        )
+    }
+}
+
+@OptIn(ExperimentalTime::class)
+@Preview
+@Composable
+private fun CollectionsScreenLoadingPreview() {
+    VolareTheme(
+        platformColorScheme = false,
+        darkMode = true
+    ) {
+        CollectionsScreen(
+            uiState = CollectionsUiState(
+                loading = true,
+                entries = null,
                 showCollectionCreation = false
             ),
             onCollectionClick = {},
