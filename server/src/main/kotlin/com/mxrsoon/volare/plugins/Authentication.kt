@@ -12,9 +12,9 @@ import io.ktor.server.auth.jwt.jwt
 import org.koin.ktor.ext.inject
 
 /**
- * Configures application security.
+ * Configures application authentication.
  */
-fun Application.configureSecurity() {
+fun Application.configureAuthentication() {
     val jwtParams by inject<JwtParams>()
     val jwtVerifier by inject<JWTVerifier>()
 

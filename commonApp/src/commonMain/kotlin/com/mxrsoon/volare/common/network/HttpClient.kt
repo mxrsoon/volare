@@ -5,7 +5,8 @@ import com.mxrsoon.volare.auth.refresh.RefreshTokensRequest
 import com.mxrsoon.volare.auth.toBearerTokens
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.engine.cio.CIO
+import io.ktor.client.engine.HttpClientEngineConfig
+import io.ktor.client.engine.HttpClientEngineFactory
 import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.authProviders
@@ -27,10 +28,15 @@ private const val API_BASE_URL = "http://34.169.52.114:80/"
 private var authTokens: TokenPair? = null
 
 /**
+ * The HTTP client engine to be used by the HttpClient.
+ */
+expect val httpClientEngine: HttpClientEngineFactory<HttpClientEngineConfig>
+
+/**
  * Get an already configured HttpClient.
  */
 val configuredHttpClient: HttpClient by lazy {
-    HttpClient(CIO) {
+    HttpClient(httpClientEngine) {
         expectSuccess = true
 
         install(DefaultRequest) {

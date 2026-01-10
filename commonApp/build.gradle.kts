@@ -1,4 +1,5 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -30,6 +31,17 @@ kotlin {
             baseName = "ComposeApp"
             isStatic = true
         }
+    }
+
+    js {
+        browser()
+        binaries.executable()
+    }
+
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        browser()
+        binaries.executable()
     }
 
     applyDefaultHierarchyTemplate()
@@ -64,7 +76,6 @@ kotlin {
             implementation(libs.androidx.adaptive.navigation)
             implementation(libs.kotlinx.datetime)
             implementation(libs.ktor.client.core)
-            implementation(libs.ktor.client.cio)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.client.auth)
             implementation(libs.ktor.client.logging)
@@ -80,10 +91,20 @@ kotlin {
             implementation(libs.androidx.credentials)
             implementation(libs.androidx.credentials.auth)
             implementation(libs.google.identity.googleid)
+            implementation(libs.ktor.client.cio)
         }
 
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
+            implementation(libs.ktor.client.cio)
+        }
+
+        iosMain.dependencies {
+            implementation(libs.ktor.client.cio)
+        }
+
+        webMain.dependencies {
+            implementation(libs.ktor.client.js)
         }
     }
 }
