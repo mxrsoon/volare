@@ -1,9 +1,9 @@
 package com.mxrsoon.volare.user
 
 import com.mxrsoon.volare.common.database.dbQuery
+import org.jetbrains.exposed.v1.core.eq
 import java.util.UUID
 import org.jetbrains.exposed.v1.jdbc.SchemaUtils
-import org.jetbrains.exposed.v1.core.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.v1.jdbc.deleteWhere
 import org.jetbrains.exposed.v1.jdbc.insert
 import org.jetbrains.exposed.v1.jdbc.selectAll

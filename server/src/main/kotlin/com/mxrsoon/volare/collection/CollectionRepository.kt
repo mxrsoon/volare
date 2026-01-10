@@ -1,10 +1,10 @@
 package com.mxrsoon.volare.collection
 
 import com.mxrsoon.volare.common.database.dbQuery
+import org.jetbrains.exposed.v1.core.eq
 import java.util.UUID
 import kotlin.time.ExperimentalTime
 import org.jetbrains.exposed.v1.jdbc.SchemaUtils
-import org.jetbrains.exposed.v1.core.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.v1.jdbc.deleteWhere
 import org.jetbrains.exposed.v1.jdbc.insert
 import org.jetbrains.exposed.v1.jdbc.selectAll
