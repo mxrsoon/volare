@@ -23,11 +23,11 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build Android app
-        run: ./gradlew :composeApp:assembleDebug
+        run: ./gradlew :androidApp:assembleDebug
 
       - id: archive-apk
         name: Archive APK
         uses: actions/upload-artifact@v4
         with:
           name: android-app
-          path: ./composeApp/build/outputs/apk/debug/composeApp-debug.apk
+          path: ./androidApp/build/outputs/apk/debug/androidApp-debug.apk
